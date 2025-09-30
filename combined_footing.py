@@ -22,17 +22,17 @@ st.sidebar.header("Input parameters (SI units)")
 
 D = st.sidebar.number_input("Center to center distance between columns", min_value=0.0, value=5.0, step=0.5, format="%.3f")
 
-st.sidebar.caption("For first column:")
+st.sidebar.caption("For **first** column:")
 P_D1 = st.sidebar.number_input("Dead axial load P_D1 (kN)", value=200.0, step=10.0, format="%.2f")
 P_L1 = st.sidebar.number_input("Live axial load P_L1 (kN)", value=100.0, step=10.0, format="%.2f")
-cx1 = st.sidebar.number_input("Column width cx (m)", value=0.30, step=0.1, format="%.3f")
-cy1 = st.sidebar.number_input("Column length cy (m)", value=0.30, step=0.1, format="%.3f")
+cx1 = st.sidebar.number_input("Column width 1 cx (m)", value=0.30, step=0.1, format="%.3f")
+cy1 = st.sidebar.number_input("Column length 1 cy (m)", value=0.30, step=0.1, format="%.3f")
 
-st.sidebar.caption("For second column:")
+st.sidebar.caption("For **second** column:")
 P_D2 = st.sidebar.number_input("Dead axial load P_D2 (kN)", value=200.0, step=10.0, format="%.2f")
 P_L2 = st.sidebar.number_input("Live axial load P_L2 (kN)", value=100.0, step=10.0, format="%.2f")
-cx2 = st.sidebar.number_input("Column width cx (m)", value=0.30, step=0.1, format="%.3f")
-cy2 = st.sidebar.number_input("Column length cy (m)", value=0.30, step=0.1, format="%.3f")
+cx2 = st.sidebar.number_input("Column width 2 cx (m)", value=0.30, step=0.1, format="%.3f")
+cy2 = st.sidebar.number_input("Column length 2 cy (m)", value=0.30, step=0.1, format="%.3f")
 
 st.sidebar.caption("Footing limitations from the column's center:")
 x1= st.sidebar.number_input("To the left of P1 (m)", value=0.0, step=0.1, format="%.2f")
