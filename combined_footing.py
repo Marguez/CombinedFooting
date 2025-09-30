@@ -34,9 +34,13 @@ P_L2 = st.sidebar.number_input("Live axial load P_L2 (kN)", value=100.0, step=10
 cx2 = st.sidebar.number_input("Column width 2 cx (m)", value=0.30, step=0.1, format="%.3f")
 cy2 = st.sidebar.number_input("Column length 2 cy (m)", value=0.30, step=0.1, format="%.3f")
 
-st.sidebar.caption("Footing limitations from the column's center:")
-x1= st.sidebar.number_input("To the left of P1 (m)", value=0.0, step=0.1, format="%.2f")
-x2= st.sidebar.number_input("To the right of P2 (m)", value=0.0, step=0.1, format="%.2f")
+st.sidebar.caption("Required distance of the footing's edge from the column's center:")
+x1= st.sidebar.number_input("To the left of P1 (m)", min_value=cx1/2, value=cx1/2, step=0.1, format="%.2f")
+if x1 == cx1/2:
+    x2= st.sidebar.number_input("To the right of P2 (m)", value=150.0, step=0.1, format="%.2f")
+else:
+    st.sidebar.info("Can't limit the other side.")
+
 
 st.sidebar.caption("Other Design Parameters:")
 t = st.sidebar.number_input("Footing thickness t (m)", min_value=0.05, value=0.50, step=0.1, format="%.3f")
@@ -52,3 +56,16 @@ fy_mp = st.sidebar.number_input("Yield strength of steel fy (MPa)", min_value=20
 d_b_mm = st.sidebar.number_input("Main bar diameter d_b (mm)", min_value=6, value=16, step=1, format="%d")
 cc_mm  = st.sidebar.number_input("Clear cover cc (mm)", min_value=5, value=50, step=1, format="%d")
 st.sidebar.write(f"*Covering: {cc_mm + d_b_mm/2} mm.*")
+
+# Service combos
+P1 = P_D1 + P_L1
+P2 = P_D2 + P_L2
+R= P1 + P2
+
+st.write(f"P1 = {P1:.2f} kN")
+st.write(f"P2 = {P2:.2f} kN")
+st.write(f"Resultant Force = {R:.2f} kN")
+
+#Solving for the Rectangular Centroid
+x= P2*D/R
+
