@@ -229,10 +229,23 @@ def trap():
             st.error("Two-way/punching shear: NOT SAFE.")
             twopass = False
     else:
-        st.error("Cyd1 is greater than B1. Punching check is not possible.") 
+        st.error("Cyd2 is greater than B2. Punching check is not possible.") 
     
     st.write("")
     st.subheader("Reinforcement (Flexural) Design")
+
+    Am = P_U1/q
+    a = (B2-B1)/L
+    b= B1/L +B1
+    c = 2Am
+    xi1= min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
+    xi2= max(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
+
+    Bm = B1 - (B1 - B2) * (xm) / L
+    st.write("*Locating maximum moment at zero shear:*")
+    st.write(f"The maximum moment is located **xm= {xm:.2f}** meters from the edge of the left footing.")
+
+    
     st.stop
 
 
