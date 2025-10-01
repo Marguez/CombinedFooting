@@ -36,10 +36,7 @@ cy2 = st.sidebar.number_input("Column length 2 cy (m)", value=0.30, step=0.1, fo
 
 st.sidebar.caption("Required distance of the footing's edge from the column's center:")
 x1= st.sidebar.number_input("To the left of P1 (m)", min_value=cx1/2, value=cx1/2, step=0.1, format="%.2f")
-if x1 == cx1/2:
-    x2= st.sidebar.number_input("To the right of P2 (m)", value=0.15, step=0.05, format="%.2f")
-else:
-    st.sidebar.info("Can't limit the other side.")
+x2= st.sidebar.number_input("To the right of P2 (m)", min_value=cx2/2 value=cx2/2, step=0.05, format="%.2f")
 
 
 st.sidebar.caption("Other Design Parameters:")
@@ -69,7 +66,7 @@ st.write(f"Resultant Force = {R:.2f} kN")
 st.write("")
 
 #Solving for the Rectangular Centroid
-st.write(f"***Solving for the centroid and the footing's length***")
+st.write(f"***Solving for the centroid and the footing's length (rectangular)***")
 if P2 > P1:
     LR= 1
     CASE= "to the right of the second column's outer face."
@@ -88,7 +85,7 @@ st.write(f"L/2 = {L_2:.2f} m.")
 L= L_2 * 2
 st.write(f"**Footing's Length, L = {L:.3f} m., say {round(L, 2)}**")
 L = round(L, 2)
-L_min = D + 0.5*(cx1 + cx2)
+L_min = D + x1 + x2
 st.write(f"L_min = {L_min:.2f} m.")
     
 if L >= L_min:
