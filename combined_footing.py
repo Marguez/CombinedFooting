@@ -91,7 +91,8 @@ st.write(f"L_min = {L_min:.2f} m.")
 st.write(f"L_max = {L_max:.2f} m.")   
 
 #Computing for Trapezoidal Footing
-def trap(x):
+def trap():
+    global x, x1
     st.write(f"***Solving as a trapezoidal combined footing***")
     L = L_max
     q_e = q_a - gamma_s * (d_f - t) - gamma_c * t
@@ -104,9 +105,9 @@ def trap(x):
         x= D-x
     st.write(f"x = {x:.2f} m.")
     st.write(f"*From the edge of the footing to the right, the centroid is:*")
-    x1 = x + x1
-    st.write(f"x1 = {x1:.2f} m.")
-    B1= -(x1 *3 / L * SumB) +2(SumB)
+    x_1 = x + x1
+    st.write(f"x1 = {x_1:.2f} m.")
+    B1= -(x_1 *3 / L * SumB) +2(SumB)
     B2= SumB- B1
     st.write(f"B1 = {B1:.2f} m.")
     st.write(f"B2 = {B2:.2f} m.")
@@ -125,7 +126,7 @@ if L >= L_min and L < L_max:
         st.write("s= 0, columns can be on the edge of the footing.")
 else:
     st.error(f"Computed L is less than the minimum length or greater than the maximum length. Compute as **TRAPEZOIDAL COMBINED FOOTING**.")
-    trap (x)
+    trap ()
     
 
 st.write("")
