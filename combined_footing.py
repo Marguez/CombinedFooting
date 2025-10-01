@@ -300,10 +300,11 @@ st.warning(f"Provide {n}–{d_b_mm} mm diameter on the bottom along the long dir
 
 #Along the short direction
 st.write(f"*ALONG THE SHORT DIRECTION:*")
+w= round(R_U/B,2)
 x = (B - cy1) / 2
 MUD = 0.5 * w * x**2
 st.write(f"x = {x:.2f} m.")
-st.write(f"WU = {WU:.2f} kN/m²")
+st.write(f"w = {w:.2f} kN/m²")
 st.write(f"MUD = {MUD:.2f} kN-m")
 MUTx = 0.9 * (51/160) * fc_mp * L * 1000 * beta * d**2 * (1 - 3*beta/16)
 
