@@ -116,7 +116,7 @@ def trap():
         st.write(f"*From the center of the first column to the right, the centroid is:*")
         x= D-x
     st.write(f"x = {x:.2f} m.")
-    st.write(f"*From the edge of the footing to the right, the centroid is:*")
+    st.write(f"*From the left edge of the footing to the right, the centroid is:*")
     x_1 = x + x1
     st.write(f"x1 = {x_1:.2f} m.")
     B1= -(x_1 *3 / L * SumB) +2*(SumB)
@@ -130,7 +130,7 @@ def trap():
     P_U1  = 1.2 * P_D1  + 1.6 * P_L1
     P_U2  = 1.2 * P_D2  + 1.6 * P_L2
     R_U = P_U1 + P_U2
-    A= 0.5*(B1+B2)*L
+    A= round(0.5*(B1+B2)*L,2)
     q= round(R_U/A,2)
     d = round((t * 1000.0 - cc_mm - d_b_mm / 2.0) / 1000.0,3)
     if d <= 0:
