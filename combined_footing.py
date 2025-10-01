@@ -66,6 +66,7 @@ R= P1 + P2
 st.write(f"P1 = {P1:.2f} kN")
 st.write(f"P2 = {P2:.2f} kN")
 st.write(f"Resultant Force = {R:.2f} kN")
+st.write("")
 
 #Solving for the Rectangular Centroid
 st.write(f"***Solving for the centroid and the footing's length***")
@@ -83,7 +84,7 @@ else:
 st.write(f"x = {x:.2f} m.")
 st.write(f"L/2 = {L_2:.2f} m.")
 L= L_2 * 2
-st.write(f"**Footings Length, L = {L:.3f} m., say {round(L, 2)}**")
+st.write(f"**Footing's Length, L = {L:.3f} m., say {round(L, 2)}**")
 L = round(L, 2)
 L_min = D + 0.5*(cx1 + cx2)
 st.write(f"L_min = {L_min:.2f} m.")
@@ -98,13 +99,15 @@ if L >= L_min:
 else:
     st.error(f"Computed L is less than the minimum length.")
     st.stop()
-    
+
+st.write("")
 st.write(f"***Solving for the footing's width***")
 # effective bearing capacity
 q_e = q_a - gamma_s * (d_f - t) - gamma_c * t
 B = R/ (q_e*L)
 st.write(f"Effective bearing capacity q_e = {q_e:.2f} kPa")
-st.write(f"**Footings Width, B = {B:.3f} m., say {math.ceil(B / 0.05) * 0.05}**")
+st.write(f"**Footing's Width, B = {B:.3f} m., say {round(math.ceil(B / 0.05) * 0.05,2)}**")
+B= round(math.ceil(B / 0.05) * 0.05,2)}
 
 
 
