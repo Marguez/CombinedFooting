@@ -243,7 +243,7 @@ if LR == 1:
     MUD= abs(0.5*w*xm**2- P_U1*(xm-cx1/2))
     a = 0.5*w
     b= -P_U1
-    c = PU1*cx1/2
+    c = P_U1*cx1/2
     xi= max(( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a))
 
 if fc_mp <= 28:
