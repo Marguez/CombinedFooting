@@ -35,8 +35,8 @@ cx2 = st.sidebar.number_input("Column 2 width cx (m)", value=0.30, step=0.1, for
 cy2 = st.sidebar.number_input("Column 2 length cy (m)", value=0.30, step=0.1, format="%.3f")
 
 st.sidebar.caption("Required distance of the footing's edge from the column's center:")
-x1= st.sidebar.number_input("To the left of P1 (m)", min_value=cx1/2, value=cx1/2, step=0.1, format="%.2f")
-x2= st.sidebar.number_input("To the right of P2 (m)", min_value=cx2/2, value=cx2/2, step=0.05, format="%.2f")
+x1= st.sidebar.number_input("To the left of P1 (m)", min_value=cx1/2, value=cx1/2, step=0.05, format="%.3f")
+x2= st.sidebar.number_input("To the right of P2 (m)", min_value=cx2/2, value=cx2/2, step=0.05, format="%.3f")
 
 
 st.sidebar.caption("Other Design Parameters:")
