@@ -93,7 +93,7 @@ st.write(f"L_min = {L_min:.2f} m.")
     
 if L >= L_min:
     st.write(f"CHECK: L is greater than the minimum length.")
-    s= L-L_min
+    s= round(L-L_min,2)
     if s != 0:
         st.write(f"Extend the footing s= {s} meters {CASE}")
     else:
@@ -130,8 +130,8 @@ st.write(f"Unifommly distributed load, w = {w} kN/m")
 st.write("")
 
 if LR==1:
-    xvd1 = x + cx1/2 + d
-    xvd2 = x + D - cx2/2 - d
+    xvd1 = x1 + cx1/2 + d
+    xvd2 = x1 + D - cx2/2 - d
     VUD1= w* xvd1 - P_U1
     VUD2 = w* xvd2 - P_U1
     st.write("Critical point to the right of column 1:")
