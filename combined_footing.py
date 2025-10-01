@@ -179,7 +179,7 @@ def trap():
     st.write("*For column 1*")
     Cxd1 = round(cx1 + d,3)
     Cyd1 = round(cy1 + d,3)
-    if Cxd1/2 >= x1:
+    if Cxd1/2 <= x1:
         Cxd1 = Cxd1
         Bo1 = 2*(Cxd1 + Cyd1)
     else:
