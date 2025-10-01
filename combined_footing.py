@@ -112,7 +112,7 @@ def trap():
     st.write(f"Effective bearing capacity q_e = {q_e:.2f} kPa")
     st.write(f"B1 + B2 = {SumB:.2f} m.")
     
-    if P1 > P2:
+    if P2 > P1:
         st.write(f"*From the center of the first column to the right, the centroid is:*")
         x= D-x
     st.write(f"x = {x:.2f} m.")
