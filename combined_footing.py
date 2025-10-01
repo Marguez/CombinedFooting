@@ -382,16 +382,16 @@ Cyd1 = round(cy1 + d,3)
 if LR== 2:
     if Cxd1/2 >= cx1/2 + s:
         Cxd1 = Cxd1
-        Bo1 = 2*(Cxd1 + Cyd1)
+        Bo1 = round(2*(Cxd1 + Cyd1),3)
     else:
         Cxd1 = round(cx1/2 + s + Cxd1/2,3)
-        Bo1 = 2 * Cxd1 + Cyd1
+        Bo1 = round(2 * Cxd1 + Cyd1,3)
     st.write(f"Cxd1 = {Cxd1:.3f} m.")
     st.write(f"Cyd1 = {Cyd1:.3f} m.")
     st.write(f"Bo1 = {Bo1:.3f} m.")
 if LR== 1:
-    Cxd1 = Cxd1 - d/2
-    Bo1 = 2 * Cxd1 + Cyd1
+    Cxd1 = round(Cxd1 - d/2,3)
+    Bo1 = round(2 * Cxd1 + Cyd1,3)
     st.write(f"Cxd1 = {Cxd1:.3f} m.")
     st.write(f"Cyd1 = {Cyd1:.3f} m.")
     st.write(f"Bo1 = {Bo1:.3f} m.")
@@ -414,16 +414,16 @@ Cyd2 = round(cy2 + d,3)
 if LR== 1:
     if Cxd2/2 >= cx2/2 + s:
         Cxd2 = Cxd2
-        Bo1 = 2*(Cxd2 + Cyd2)
+        Bo1 = round(2*(Cxd2 + Cyd2),3)
     else:
         Cxd2 = round(cx2/2 + s + Cxd2/2,3)
-        Bo2 = 2 * Cxd2 + Cyd2
+        Bo2 = round(2 * Cxd2 + Cyd2,3)
     st.write(f"Cxd2 = {Cxd2:.3f} m.")
     st.write(f"Cyd2 = {Cyd2:.3f} m.")
     st.write(f"Bo2 = {Bo2:.3f} m.")
 if LR== 2:
     Cxd2 = Cxd2 - d/2
-    Bo2 = 2 * Cxd2 + Cyd2
+    Bo2 = round(2 * Cxd2 + Cyd2,3)
     st.write(f"Cxd2 = {Cxd2:.3f} m.")
     st.write(f"Cyd2 = {Cyd2:.3f} m.")
     st.write(f"Bo2 = {Bo2:.3f} m.")
