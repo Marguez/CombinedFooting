@@ -335,7 +335,6 @@ st.write(f"n = {nx:.2f} along the short-direction")
 nxb = math.ceil(2*nx/(L/B+1))
 nxs = math.ceil((nx-nxb)/2)*2
 nx = nxb+nxs
-nz = math.ceil(nz)
 st.warning(f"Along short direction: Provide **{nx}–{d_b_mm} mm diameter DRB**, "
 f"**{nxb}** within the {B}-m band and **{nxs/2}** each side outside the band.")
 
