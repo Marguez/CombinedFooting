@@ -127,8 +127,23 @@ else:
 
 st.write(f"P_U1 = {P_U1:.2f} kN, P_U2 = {P_U2:.2f} kN, and R_U = {R_U:.2f} kN")
 st.write(f"Unifommly distributed load, w = {w} kN/m")
+st.write("")
 
-xvd1 = 
+if LR=1:
+    xvd1 = x + cx1/2 + d
+    xvd2 = x + D - cx2/2 - d
+    VUD1= w* xvd1 - P_U1
+    VUD2 = w* xvd2 - P_U1
+    st.write("Critical point to the right of column 1:")
+    st.write(f"xvd1 = {xvd1:.3f} m.")
+    st.write(f"VUD1 = {VUD1:.3f} kN.")
+    st.write("")
+    st.write("Critical point to the left of column 2:")
+    st.write(f"xvd2 = {xvd2:.3f} m.")
+    st.write(f"VUD2 = {VUD2:.3f} kN.")
+    
+
+    
 
 
 
