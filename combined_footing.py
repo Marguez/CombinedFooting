@@ -129,34 +129,73 @@ st.write(f"P_U1 = {P_U1:.2f} kN, P_U2 = {P_U2:.2f} kN, and R_U = {R_U:.2f} kN")
 st.write(f"Unifommly distributed load, w = {w} kN/m")
 st.write("")
 
-if LR==1:
-    xvd1 = round(x1 + cx1/2 + d,2)
-    xvd2 = round(x1 + D - cx2/2 - d,2)
-    VUD1= abs(w* xvd1 - P_U1)
-    Vd1 = VUD1*1000/(0.75*B*1000*d*1000)
-    VUD2 = abs(w* xvd2 - P_U1)
-    Vd2 = VUD2*1000/(0.75*B*1000*d*1000)
-    
-    Vda= fc_mp**0.5/6
-    st.write(f"**Allowable Shear Stress: {Vda:.2f} MPa.**")
-    
-    st.write("*Critical point to the right of column 1:*")
-    st.write(f"xvd1 = {xvd1:.3f} m.")
-    st.write(f"VUD1 = {VUD1:.2f} kN.")
-    st.write(f"Vd1 = {Vd1:.2f} MPa.")
-    if Vda > Vd1:
-        st.success("One-way shear: SAFE.")
+xvd1 = round(x1 + cx1/2 + d,2)
+xvd2 = round(x1 + D - cx2/2 - d,2)
+VUD1= abs(w* xvd1 - P_U1)
+Vd1 = VUD1*1000/(0.75*B*1000*d*1000)
+VUD2 = abs(w* xvd2 - P_U1)
+Vd2 = VUD2*1000/(0.75*B*1000*d*1000)
+
+Vda= fc_mp**0.5/6
+st.write(f"**Allowable Shear Stress: {Vda:.2f} MPa.**")
+
+st.write("*Critical point to the right of column 1:*")
+st.write(f"xvd1 = {xvd1:.3f} m.")
+st.write(f"VUD1 = {VUD1:.2f} kN.")
+st.write(f"Vd1 = {Vd1:.2f} MPa.")
+if Vda > Vd1:
+    st.success("One-way shear: SAFE.")
+else:
+    st.error("One-way shear: NOT SAFE.")
+st.write("")
+st.write("*Critical point to the left of column 2:*")
+st.write(f"xvd2 = {xvd2:.3f} m.")
+st.write(f"VUD2 = {VUD2:.2f} kN.")
+st.write(f"Vd2 = {Vd2:.2f} MPa.")
+if Vda > Vd2:
+    st.success("One-way shear: SAFE.")
+else:
+    st.error("One-way shear: NOT SAFE.")
+
+st.write("")
+st.subheader("Footing thickness adequacy — Two-Way Shear (Punching Shear)")
+q= round(R_U/L/B,2)
+st.write(f"Unifommly distributed pressure, qu = {q} kN/m")
+st.write("")
+Vpa = math.sqrt(fc_mp) / 3.0
+st.write(f"**Allowable Punching Stress: {Vpa:.2f} MPa.**")
+
+st.write("*For column 1*")
+Cxd1 = round(cx1 + d,3)
+Cyd1 = round(cy1 + d,3)
+if LR== 2:
+    if Cxd1/2 >= cx1/2 + s:
+        Cxd1 = Cxd1
+        Bo1 = 2*(Cxd1 + Cyd1)
     else:
-        st.error("One-way shear: NOT SAFE.")
-    st.write("")
-    st.write("*Critical point to the left of column 2:*")
-    st.write(f"xvd2 = {xvd2:.3f} m.")
-    st.write(f"VUD2 = {VUD2:.2f} kN.")
-    st.write(f"Vd2 = {Vd2:.2f} MPa.")
-    if Vda > Vd2:
-        st.success("One-way shear: SAFE.")
-    else:
-        st.error("One-way shear: NOT SAFE.")
+        Cxd1 = round(cx1/2 + s + Cxd1/2,3)
+        Bo1 = 2 * Cxd1 + Cyd1
+    st.write(f"Cxd1 = {Cxd1:.3f} m.")
+    st.write(f"Cyd1 = {Cyd1:.3f} m.")
+    st.write(f"Bo1 = {Bo1:.3f} m.")
+if LR== 1:
+    Cxd1 = Cxd1 - d/2
+    Bo1 = 2 * Cxd1 + Cyd1
+    st.write(f"Cxd1 = {Cxd1:.3f} m.")
+    st.write(f"Cyd1 = {Cyd1:.3f} m.")
+    st.write(f"Bo1 = {Bo1:.3f} m.")
+
+Vup1 = P_U1 - q * Cxd1 * Cyd1
+Vp1 = Vup * 1000 / (0.75 * Bo1 * d * 1_000_000)
+
+
+if Vpa > Vp1:
+    st.success("Two-way/punching shear: SAFE.")
+else:
+    st.error("Two-way/punching shear: NOT SAFE.")
+    twopass = False
+
+
 
     
 
