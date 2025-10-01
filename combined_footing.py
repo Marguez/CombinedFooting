@@ -147,6 +147,7 @@ def trap():
     
     st.write("*Critical point from the left edge of the footing:*")
     st.write(f"xvd1 = {xvd1:.3f} m.")
+    st.write(f"Width B3 at this point: {B3:.2f} m.")
     st.write(f"VUD1 = {VUD1:.2f} kN.")
     st.write(f"Vd1 = {Vd1:.2f} MPa.")
     if Vda > Vd1:
@@ -159,6 +160,7 @@ def trap():
 
     st.write(f"xvd2 = {xvd2:.3f} m.")
     st.write(f"VUD2 = {VUD2:.2f} kN.")
+    st.write(f"Width B4 at this point: {B4:.2f} m.")
     st.write(f"Vd2 = {Vd2:.2f} MPa.")
     if Vda > Vd2:
         st.success("One-way shear: SAFE.")
