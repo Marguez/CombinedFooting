@@ -232,7 +232,7 @@ else:
 st.write("")
 st.subheader("Reinforcement (Flexural) Design")
 st.write("*Locating maximum moment at zero shear:*")
-xm= round(P_U1/w)
+xm= round(P_U1/w,2)
 
 if LR == 2:
     MUD= abs(0.5*w*xm**2- P_U1*(xm-s-cx1/2))
