@@ -98,7 +98,7 @@ def trap():
     q_e = q_a - gamma_s * (d_f - t) - gamma_c * t
     SumB= 2*R/(q_e*L)
     st.write(f"Effective bearing capacity q_e = {q_e:.2f} kPa")
-    st.write(f"B1 +B2 = {SumB:.2f} m.")
+    st.write(f"B1 + B2 = {SumB:.2f} m.")
     
     if P1 > P2:
         st.write(f"*From the center of the first column to the right, the centroid is:*")
@@ -109,7 +109,7 @@ def trap():
     st.write(f"x1 = {x_1:.2f} m.")
     B1= -(x_1 *3 / L * SumB) +2*(SumB)
     B1= math.ceil(B1 / 0.05) * 0.05
-    B2= math.ceil(SumB - B1 / 0.05) * 0.05
+    B2= math.ceil((SumB - B1) / 0.05) * 0.05
     st.write(f"**B1 = {B1:.2f} m.**")
     st.write(f"**B2 = {B2:.2f} m.**")
     
