@@ -91,7 +91,7 @@ st.write(f"L_min = {L_min:.2f} m.")
 if L >= L_min:
     st.write(f"CHECK: L is greater than the minimum length.")
     s= L-L_min
-    if s =! 0:
+    if s != 0:
         st.write(f"Extend the footing s= {s} meters {CASE}")
     else:
         st.write("s= 0, columns can be on the edge of the footing.")
