@@ -164,6 +164,7 @@ st.write(f"Unifommly distributed pressure, qu = {q} kN/m")
 st.write("")
 Vpa = math.sqrt(fc_mp) / 3.0
 st.write(f"**Allowable Punching Stress: {Vpa:.2f} MPa.**")
+st.write("")
 
 st.write("*For column 1*")
 Cxd1 = round(cx1 + d,3)
@@ -191,6 +192,38 @@ st.write(f"Vup1 = {Vup1:.2f} kN.")
 st.write(f"Vp1 = {Vp1:.2f} MPa.")
 
 if Vpa > Vp1:
+    st.success("Two-way/punching shear: SAFE.")
+else:
+    st.error("Two-way/punching shear: NOT SAFE.")
+    twopass = False
+    
+st.write("")
+st.write("*For column 2*")
+Cxd2 = round(cx2 + d,3)
+Cyd2 = round(cy2 + d,3)
+if LR== 1:
+    if Cxd2/2 >= cx2/2 + s:
+        Cxd2 = Cxd2
+        Bo1 = 2*(Cxd2 + Cyd2)
+    else:
+        Cxd2 = round(cx2/2 + s + Cxd2/2,3)
+        Bo2 = 2 * Cxd2 + Cyd2
+    st.write(f"Cxd2 = {Cxd2:.3f} m.")
+    st.write(f"Cyd2 = {Cyd2:.3f} m.")
+    st.write(f"Bo2 = {Bo2:.3f} m.")
+if LR== 2:
+    Cxd2 = Cxd2 - d/2
+    Bo2 = 2 * Cxd2 + Cyd2
+    st.write(f"Cxd2 = {Cxd2:.3f} m.")
+    st.write(f"Cyd2 = {Cyd2:.3f} m.")
+    st.write(f"Bo2 = {Bo2:.3f} m.")
+
+Vup2 = P_U2 - q * Cxd2 * Cyd2
+Vp2 = Vup2 * 1000 / (0.75 * Bo2 * d * 1_000_000)
+st.write(f"Vup2 = {Vup2:.2f} kN.")
+st.write(f"Vp2 = {Vp2:.2f} MPa.")
+
+if Vpa > Vp2:
     st.success("Two-way/punching shear: SAFE.")
 else:
     st.error("Two-way/punching shear: NOT SAFE.")
