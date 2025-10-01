@@ -74,6 +74,16 @@ st.write(f"L/2 = {L_2:.2f} m.")
 L= L_2 * 2
 st.write(f"L = {L:.2f} m., say {round(L, 1)}")
 L = round(L, 1)
+L_min = D + 0.5*(cx1 + cx2)
+st.write(f"L_min = {L_min:.2f} m.")
+if L > L_min:
+   st.write(f"CHECK: L is greater than the minimum length.")
+else:
+    st.error(f"Computed L is less than the minimum length.")
+    st.stop()
+
+if P1 > P2:
+    s
 
 
 
