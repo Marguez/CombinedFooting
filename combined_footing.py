@@ -252,7 +252,7 @@ def trap():
     c = -2*Am
     xm1= round(min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0),2)
     xc= xm1-x1
-    Bm = B1 - (B1 - B2) * (xm1) / L
+    Bm = round(B1 - (B1 - B2) * (xm1) / L,2)
     MUD = P_U1*xc-.5*Bm*xm1**2*q/3 -.5*B1*xm1**2*q*2/3
     st.write("*Locating maximum moment at zero shear:*")
     st.write(f"The maximum moment is located **xm= {xm1:.2f}** meters, with a width, **Bm= {Bm:.2f}** meters from the edge of the left footing.")
