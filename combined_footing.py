@@ -35,8 +35,8 @@ cx2 = st.sidebar.number_input("Column 2 width cx (m)", value=0.30, step=0.1, for
 cy2 = st.sidebar.number_input("Column 2 length cy (m)", value=0.30, step=0.1, format="%.3f")
 
 st.sidebar.caption("Required distance of the footing's edge from the column's center:")
-x1= st.sidebar.number_input("To the left of P1 (m)", min_value=cx1/2, value=cx1/2, step=0.05, format="%.3f")
-x2= st.sidebar.number_input("To the right of P2 (m)", min_value=cx2/2, value=cx2/2, step=0.05, format="%.3f")
+x1= st.sidebar.number_input("To the left of P1 (m)", value=cx1/2, step=0.05, format="%.3f")
+x2= st.sidebar.number_input("To the right of P2 (m)", value=cx2/2, step=0.05, format="%.3f")
 
 
 st.sidebar.caption("Other Design Parameters:")
@@ -86,9 +86,21 @@ L= L_2 * 2
 st.write(f"**Footing's Length, L = {L:.3f} m., say {round(L, 2)}**")
 L = round(L, 2)
 L_min = D + 0.5*(cx1 + cx2)
-L_max = D + x1 +x2
 st.write(f"L_min = {L_min:.3f} m.")
-st.write(f"L_max = {L_max:.3f} m.")   
+if P2 > P1:
+    if x2 == 0:
+        L_max = 9999999
+        st.write(f"The length is not restricted.") 
+    else:
+        L_max = D + x1 + x2
+        st.write(f"L_max = {L_max:.3f} m.")   
+else:
+    if x1 == 0:
+        L_max = 9999999
+        st.write(f"The length is not restricted.") 
+    else:
+        L_max = D + x1 + x2
+        st.write(f"L_max = {L_max:.3f} m.")   
 
 #Computing for Trapezoidal Footing
 def trap():
