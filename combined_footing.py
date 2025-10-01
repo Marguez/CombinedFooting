@@ -179,64 +179,57 @@ def trap():
     st.write("*For column 1*")
     Cxd1 = round(cx1 + d,3)
     Cyd1 = round(cy1 + d,3)
-    if Cxd1/2 <= x1:
-        Cxd1 = Cxd1
-        Bo1 = 2*(Cxd1 + Cyd1)
-    else:
-        Cxd1 = round(x1 + Cxd1/2,3)
-        Bo1 = 2 * Cxd1 + Cyd1
-    st.write(f"Cxd1 = {Cxd1:.3f} m.")
-    st.write(f"Cyd1 = {Cyd1:.3f} m.")
-    st.write(f"Bo1 = {Bo1:.3f} m.")
-    if LR== 1:
-        Cxd1 = Cxd1 - d/2
-        Bo1 = 2 * Cxd1 + Cyd1
+    if Cyd1 < B1:
+        if Cxd1/2 <= x1:
+            Cxd1 = Cxd1
+            Bo1 = 2*(Cxd1 + Cyd1)
+        else:
+            Cxd1 = round(x1 + Cxd1/2,3)
+            Bo1 = 2 * Cxd1 + Cyd1
         st.write(f"Cxd1 = {Cxd1:.3f} m.")
         st.write(f"Cyd1 = {Cyd1:.3f} m.")
         st.write(f"Bo1 = {Bo1:.3f} m.")
-    
-    Vup1 = P_U1 - q * Cxd1 * Cyd1
-    Vp1 = Vup1 * 1000 / (0.75 * Bo1 * d * 1_000_000)
-    st.write(f"Vup1 = {Vup1:.2f} kN.")
-    st.write(f"Vp1 = {Vp1:.2f} MPa.")
-    
-    if Vpa > Vp1:
-        st.success("Two-way/punching shear: SAFE.")
+        
+        Vup1 = P_U1 - q * Cxd1 * Cyd1
+        Vp1 = Vup1 * 1000 / (0.75 * Bo1 * d * 1_000_000)
+        st.write(f"Vup1 = {Vup1:.2f} kN.")
+        st.write(f"Vp1 = {Vp1:.2f} MPa.")
+        
+        if Vpa > Vp1:
+            st.success("Two-way/punching shear: SAFE.")
+        else:
+            st.error("Two-way/punching shear: NOT SAFE.")
+            twopass = False
     else:
-        st.error("Two-way/punching shear: NOT SAFE.")
-        twopass = False
+        st.error("Cyd1 is greater than B1. Punching check is not possible.")
         
     st.write("")
     st.write("*For column 2*")
     Cxd2 = round(cx2 + d,3)
     Cyd2 = round(cy2 + d,3)
-    if LR== 1:
-        if Cxd2/2 >= cx2/2 + s:
+    if Cyd2 < B2:
+        if Cxd2/2 <= x2:
             Cxd2 = Cxd2
-            Bo1 = 2*(Cxd2 + Cyd2)
+            Bo2 = 2*(Cxd2 + Cyd2)
         else:
-            Cxd2 = round(cx2/2 + s + Cxd2/2,3)
+            Cxd2 = round(x2 + Cxd2/2,3)
             Bo2 = 2 * Cxd2 + Cyd2
         st.write(f"Cxd2 = {Cxd2:.3f} m.")
         st.write(f"Cyd2 = {Cyd2:.3f} m.")
         st.write(f"Bo2 = {Bo2:.3f} m.")
-    if LR== 2:
-        Cxd2 = Cxd2 - d/2
-        Bo2 = 2 * Cxd2 + Cyd2
-        st.write(f"Cxd2 = {Cxd2:.3f} m.")
-        st.write(f"Cyd2 = {Cyd2:.3f} m.")
-        st.write(f"Bo2 = {Bo2:.3f} m.")
-    
-    Vup2 = P_U2 - q * Cxd2 * Cyd2
-    Vp2 = Vup2 * 1000 / (0.75 * Bo2 * d * 1_000_000)
-    st.write(f"Vup2 = {Vup2:.2f} kN.")
-    st.write(f"Vp2 = {Vp2:.2f} MPa.")
-    
-    if Vpa > Vp2:
-        st.success("Two-way/punching shear: SAFE.")
+        
+        Vup2 = P_U2 - q * Cxd2 * Cyd2
+        Vp2 = Vup2 * 1000 / (0.75 * Bo2 * d * 1_000_000)
+        st.write(f"Vup2 = {Vup2:.2f} kN.")
+        st.write(f"Vp2 = {Vp2:.2f} MPa.")
+        
+        if Vpa > Vp2:
+            st.success("Two-way/punching shear: SAFE.")
+        else:
+            st.error("Two-way/punching shear: NOT SAFE.")
+            twopass = False
     else:
-        st.error("Two-way/punching shear: NOT SAFE.")
-        twopass = False
+        st.error("Cyd1 is greater than B1. Punching check is not possible.") 
     
     st.write("")
     st.subheader("Reinforcement (Flexural) Design")
