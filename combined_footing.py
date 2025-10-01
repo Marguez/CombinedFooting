@@ -103,7 +103,14 @@ def trap(x):
         st.write(f"*From the center of the first column to the right, the centroid is:*")
         x= D-x
     st.write(f"x = {x:.2f} m.")
-
+    st.write(f"*From the edge of the footing to the right, the centroid is:*")
+    x1 = x + x1
+    st.write(f"x1 = {x1:.2f} m.")
+    B1= -(x1 *3 / L * SumB) +2(SumB)
+    B2= SumB- B1
+    st.write(f"B1 = {B1:.2f} m.")
+    st.write(f"B2 = {B2:.2f} m.")
+    
 
     
     st.stop()
