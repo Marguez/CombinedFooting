@@ -244,7 +244,14 @@ def trap():
     MUD = P_U1*xc-.5*Bm*xm1**2*q/3 -.5*B1*xm1**2*q*2/3
     st.write("*Locating maximum moment at zero shear:*")
     st.write(f"The maximum moment is located **xm= {xm1:.2f}** meters from the edge of the left footing.")
-
+   
+    if fc_mp <= 28:
+    beta = 0.85
+    elif fc_mp < 55:
+        beta = 0.85 - 0.05/7 * (fc_mp - 28)
+    else:
+        beta = 0.65
+        
     MUT = 0.9 * (51/160) * fc_mp * Bm * 1000 * beta * d**2 * (1 - 3*beta/16)
     st.write(f"MUD = {MUD:.2f} kN-m")
     st.write(f"MUT = {MUT:.2f} kN-m")
