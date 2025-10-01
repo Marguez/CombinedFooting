@@ -108,9 +108,10 @@ def trap():
     x_1 = x + x1
     st.write(f"x1 = {x_1:.2f} m.")
     B1= -(x_1 *3 / L * SumB) +2*(SumB)
-    B2= SumB- B1
-    st.write(f"B1 = {B1:.2f} m.")
-    st.write(f"B2 = {B2:.2f} m.")
+    B1= math.ceil(B1 / 0.05) * 0.05
+    B2= math.ceil(SumB- B1 / 0.05) * 0.05
+    st.write(f"**B1 = {B1:.2f} m.**")
+    st.write(f"**B2 = {B2:.2f} m.**")
     
 
     
