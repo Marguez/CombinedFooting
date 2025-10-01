@@ -186,8 +186,9 @@ if LR== 1:
     st.write(f"Bo1 = {Bo1:.3f} m.")
 
 Vup1 = P_U1 - q * Cxd1 * Cyd1
-Vp1 = Vup * 1000 / (0.75 * Bo1 * d * 1_000_000)
-
+Vp1 = Vup1 * 1000 / (0.75 * Bo1 * d * 1_000_000)
+st.write(f"Vup1 = {Vup1:.2f} kN.")
+st.write(f"Vp1 = {Vp1:.2f} MPa.")
 
 if Vpa > Vp1:
     st.success("Two-way/punching shear: SAFE.")
