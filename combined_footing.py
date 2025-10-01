@@ -118,30 +118,45 @@ P_U1  = 1.2 * P_D1  + 1.6 * P_L1
 P_U2  = 1.2 * P_D2  + 1.6 * P_L2
 R_U = P_U1 + P_U2
 w= round(R_U/L,2)
-d = (t * 1000.0 - cc_mm - d_b_mm / 2.0) / 1000.0
+d = round((t * 1000.0 - cc_mm - d_b_mm / 2.0) / 1000.0,2)
 if d <= 0:
     st.error(f"Effective depth d = {d:.4f} m is non-positive. Check t, cc_mm, d_b_mm.")
     st.stop()
 else:
-    st.write(f"d = {d:.3f} m")
+    st.write(f"d = {d:.2f} m")
 
 st.write(f"P_U1 = {P_U1:.2f} kN, P_U2 = {P_U2:.2f} kN, and R_U = {R_U:.2f} kN")
 st.write(f"Unifommly distributed load, w = {w} kN/m")
 st.write("")
 
 if LR==1:
-    xvd1 = x1 + cx1/2 + d
-    xvd2 = x1 + D - cx2/2 - d
-    VUD1= w* xvd1 - P_U1
-    VUD2 = w* xvd2 - P_U1
-    st.write("Critical point to the right of column 1:")
-    st.write(f"xvd1 = {xvd1:.3f} m.")
-    st.write(f"VUD1 = {VUD1:.3f} kN.")
-    st.write("")
-    st.write("Critical point to the left of column 2:")
-    st.write(f"xvd2 = {xvd2:.3f} m.")
-    st.write(f"VUD2 = {VUD2:.3f} kN.")
+    xvd1 = round(x1 + cx1/2 + d,2)
+    xvd2 = round(x1 + D - cx2/2 - d,2)
+    VUD1= abs(w* xvd1 - P_U1)
+    Vd1 = VUD1*1000/(0.75*B*1000*d**2*1e6)
+    VUD2 = abs(w* xvd2 - P_U1)
+    Vd2 = VUD2*1000/(0.75*B*1000*d**2*1e6)
     
+    Vda= fc_mp**0.5/6
+    st.write(f"Allowable Shear Stress: {Vda:.2f} MPa")
+    
+    st.write("*Critical point to the right of column 1:*")
+    st.write(f"xvd1 = {xvd1:.3f} m.")
+    st.write(f"VUD1 = {VUD1:.2f} kN.")
+    st.write(f"Vd1 = {Vd1:.2f} MPa.")
+    if Vda > Vd1:
+        st.success("One-way shear: SAFE.")
+    else:
+        st.error("One-way shear: NOT SAFE.")
+    st.write("")
+    st.write("*Critical point to the left of column 2:*")
+    st.write(f"xvd2 = {xvd2:.3f} m.")
+    st.write(f"VUD2 = {VUD2:.2f} kN.")
+    st.write(f"Vd2 = {Vd2:.2f} MPa.")
+    if Vda > Vd2:
+        st.success("One-way shear: SAFE.")
+    else:
+        st.error("One-way shear: NOT SAFE.")
 
     
 
