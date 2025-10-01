@@ -243,7 +243,7 @@ def trap():
 
     Bm1 = B1 - (B1 - B2) * (xm1) / L
     st.write("*Locating maximum moment at zero shear:*")
-    st.write(f"The maximum moment is located **xm= {xm1:.2f}** meters from the edge of the left footing.")
+    st.write(f"The maximum moment is located **xm= {xm1:.2f} and {xm2:.2f}** meters from the edge of the left footing.")
 
     
     st.stop
