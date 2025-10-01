@@ -67,8 +67,13 @@ st.write(f"P2 = {P2:.2f} kN")
 st.write(f"Resultant Force = {R:.2f} kN")
 
 #Solving for the Rectangular Centroid
-x= round(P2*D/R, 2)
-L_2= round (x + x1, 2)
+if P2 > P1: 
+    x= round(P2*D/R, 2)
+    L_2= round (x + x1, 2)
+else:
+    x= round(P1*D/R, 2)
+    L_2= round (x + x2, 2)
+
 st.write(f"x = {x:.2f} m.")
 st.write(f"L/2 = {L_2:.2f} m.")
 L= L_2 * 2
@@ -76,14 +81,14 @@ st.write(f"L = {L:.2f} m., say {round(L, 1)}")
 L = round(L, 1)
 L_min = D + 0.5*(cx1 + cx2)
 st.write(f"L_min = {L_min:.2f} m.")
+    
 if L > L_min:
-   st.write(f"CHECK: L is greater than the minimum length.")
+    st.write(f"CHECK: L is greater than the minimum length.")
 else:
     st.error(f"Computed L is less than the minimum length.")
     st.stop()
 
-if P1 > P2:
-    s
+
 
 
 
