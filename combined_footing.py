@@ -238,13 +238,44 @@ def trap():
     a = (B2-B1)/L
     b= 2*B1
     c = -2*Am
-    xm1= min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
-    xm2= max(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
-
-    Bm1 = B1 - (B1 - B2) * (xm1) / L
+    xm1= round(min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0),2)
+    xc= xm1-x1
+    Bm = B1 - (B1 - B2) * (xm1) / L
+    MUD = P_U1*xc-.5*Bm*xm1**2*q/3 -.5*B1*xm1**2*q*2/3
     st.write("*Locating maximum moment at zero shear:*")
-    st.write(f"The maximum moment is located **xm= {xm1:.2f} and {xm2:.2f}** meters from the edge of the left footing.")
+    st.write(f"The maximum moment is located **xm= {xm1:.2f}** meters from the edge of the left footing.")
 
+    MUT = 0.9 * (51/160) * fc_mp * Bm * 1000 * beta * d**2 * (1 - 3*beta/16)
+    st.write(f"MUD = {MUD:.2f} kN-m")
+    st.write(f"MUT = {MUT:.2f} kN-m")
+    if MUT > MUD:
+        st.write(f"*Since MUT > MUD, tension-controlled (phi = 0.9)*")
+        phi = 0.9
+    else:
+        st.write(f"*Since MUT <= MUD, transition region (phi = assumed 0.75)*")
+        phi = 0.75
+    
+    Rn = round(MUD * 1e6 / (phi * Bm * d**2 * 1e9), 3)
+    tmp = 1 - 2*Rn/(0.85*fc_mp)
+    rho_actual = 0.0
+    if tmp >= 0:
+        rho_actual = round(0.85 * fc_mp / fy_mp * (1 - math.sqrt(tmp)), 4)
+    else:
+        rho_actual = 0.0
+    rho_min = round(max(1.4/fy_mp, 0.25 * math.sqrt(fc_mp) / fy_mp), 4)
+    rho_des = max(rho_actual, rho_min)
+    
+    st.write(f"Rn = {Rn:.3f}")
+    st.write(f"rho_actual = {rho_actual:.4f}")
+    st.write(f"rho_min = {rho_min:.4f}")
+    st.write(f"rho_des (governs) = {rho_des:.4f}")
+    
+    As = rho_des * Bm * d * 1e6  # mm2
+    n = math.ceil(As * 4 / (math.pi * d_b_mm**2))
+    st.write(f"As = {As:.2f} mm²")
+    st.warning(f"Provide {n}–{d_b_mm} mm diameter DRB on the top of the footing.")
+    
+    st.write("")
     
     st.stop
 
