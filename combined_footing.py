@@ -90,14 +90,14 @@ st.write(f"L_min = {L_min:.3f} m.")
 if P2 > P1:
     if x2 == 0:
         L_max = 9999999
-        st.write(f"The length is not restricted.") 
+        st.write(f"The length is not restricted to the right.") 
     else:
         L_max = D + x1 + x2
         st.write(f"L_max = {L_max:.3f} m.")   
 else:
     if x1 == 0:
         L_max = 9999999
-        st.write(f"The length is not restricted.") 
+        st.write(f"The length is not restricted to the left.") 
     else:
         L_max = D + x1 + x2
         st.write(f"L_max = {L_max:.3f} m.")   
