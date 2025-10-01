@@ -118,7 +118,7 @@ if L >= L_min and L < L_max:
         st.write("s= 0, columns can be on the edge of the footing.")
 else:
     st.error(f"Computed L is less than the minimum length or greater than the maximum length. Compute as **TRAPEZOIDAL COMBINED FOOTING**.")
-    trap ()
+    trap (x)
     
 
 st.write("")
