@@ -67,10 +67,15 @@ st.write(f"P2 = {P2:.2f} kN")
 st.write(f"Resultant Force = {R:.2f} kN")
 
 #Solving for the Rectangular Centroid
-if P2 > P1: 
+st.write(f"***Solving for the centroid***")
+if P2 > P1:
+    CASE= to the right of the second column's outer face.
+    st.write(f"*From the center of the first column to the right:*")
     x= round(P2*D/R, 2)
     L_2= round (x + x1, 2)
 else:
+    CASE = to the left of the first column's outer face.
+    st.write(f"*From the center of the second column to the left:*")
     x= round(P1*D/R, 2)
     L_2= round (x + x2, 2)
 
@@ -84,6 +89,8 @@ st.write(f"L_min = {L_min:.2f} m.")
     
 if L > L_min:
     st.write(f"CHECK: L is greater than the minimum length.")
+    s= L-L_min
+    st.write(f"Extend the footing s, {s} meters {CASE}")
 else:
     st.error(f"Computed L is less than the minimum length.")
     st.stop()
