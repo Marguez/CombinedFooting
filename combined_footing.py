@@ -85,10 +85,18 @@ st.write(f"L/2 = {L_2:.2f} m.")
 L= L_2 * 2
 st.write(f"**Footing's Length, L = {L:.3f} m., say {round(L, 2)}**")
 L = round(L, 2)
-L_min = D + x1 + x2
+L_min = D + 0.5*(cx1 + cx2)
+L_max = D + x1 +x2
 st.write(f"L_min = {L_min:.2f} m.")
-    
-if L >= L_min:
+st.write(f"L_max = {L_max:.2f} m.")   
+
+#Computing for Trapezoidal Footing
+def trap():
+    st.write(f"test")
+    st.stop()
+
+
+if L >= L_min and L < L_max:
     st.write(f"CHECK: L is greater than the minimum length.")
     s= round(L-L_min,2)
     if s != 0:
@@ -96,8 +104,9 @@ if L >= L_min:
     else:
         st.write("s= 0, columns can be on the edge of the footing.")
 else:
-    st.error(f"Computed L is less than the minimum length.")
-    st.stop()
+    st.error(f"Computed L is less than the minimum length or greater than the maximum length. Compute as **TRAPEZOIDAL COMBINED FOOTING**.")
+    trap ()
+    
 
 st.write("")
 st.write(f"***Solving for the footing's width***")
