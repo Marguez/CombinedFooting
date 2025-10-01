@@ -71,11 +71,13 @@ st.write("")
 #Solving for the Rectangular Centroid
 st.write(f"***Solving for the centroid and the footing's length***")
 if P2 > P1:
+    LR= 1
     CASE= "to the right of the second column's outer face."
     st.write(f"*From the center of the first column to the right:*")
     x= round(P2*D/R, 2)
     L_2= round (x + x1, 2)
 else:
+    LR= 2
     CASE = "to the left of the first column's outer face."
     st.write(f"*From the center of the second column to the left:*")
     x= round(P1*D/R, 2)
@@ -107,7 +109,27 @@ q_e = q_a - gamma_s * (d_f - t) - gamma_c * t
 B = R/ (q_e*L)
 st.write(f"Effective bearing capacity q_e = {q_e:.2f} kPa")
 st.write(f"**Footing's Width, B = {B:.3f} m., say {round(math.ceil(B / 0.05) * 0.05,2)}**")
-B= round(math.ceil(B / 0.05) * 0.05,2)}
+B= round(math.ceil(B / 0.05) * 0.05,2)
+st.write("")
+
+st.subheader("Footing thickness adequacy — One-Way Shear (Beam Shear)")
+
+P_U1  = 1.2 * P_D1  + 1.6 * P_L1
+P_U2  = 1.2 * P_D2  + 1.6 * P_L2
+R_U = P_U1 + P_U2
+w= round(R_U/L,2)
+d = (t * 1000.0 - cc_mm - d_b_mm / 2.0) / 1000.0
+if d <= 0:
+    st.error(f"Effective depth d = {d:.4f} m is non-positive. Check t, cc_mm, d_b_mm.")
+    st.stop()
+else:
+    st.write(f"d = {d:.3f} m")
+
+st.write(f"P_U1 = {P_U1:.2f} kN, P_U2 = {P_U2:.2f} kN, and R_U = {R_U:.2f} kN")
+st.write(f"Unifommly distributed load, w = {w} kN/m")
+
+xvd1 = 
+
 
 
 
