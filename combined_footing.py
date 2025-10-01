@@ -246,7 +246,7 @@ def trap():
     st.write(f"The maximum moment is located **xm= {xm1:.2f}** meters from the edge of the left footing.")
    
     if fc_mp <= 28:
-    beta = 0.85
+        beta = 0.85
     elif fc_mp < 55:
         beta = 0.85 - 0.05/7 * (fc_mp - 28)
     else:
