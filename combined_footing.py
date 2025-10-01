@@ -231,13 +231,20 @@ else:
 
 st.write("")
 st.subheader("Reinforcement (Flexural) Design")
-st.write("*Locating maximum moment at zero shear:*")
 xm= round(P_U1/w,2)
 
 if LR == 2:
     MUD= abs(0.5*w*xm**2- P_U1*(xm-s-cx1/2))
+    a = 0.5*w
+    b= -P_U1
+    c = PU1 +s+cx1/2
+    xi= max(( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a))
 if LR == 1:
     MUD= abs(0.5*w*xm**2- P_U1*(xm-cx1/2))
+    a = 0.5*w
+    b= -P_U1
+    c = PU1*cx1/2
+    xi= max(( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a))
 
 if fc_mp <= 28:
     beta = 0.85
@@ -245,9 +252,13 @@ elif fc_mp < 55:
     beta = 0.85 - 0.05/7 * (fc_mp - 28)
 else:
     beta = 0.65
+    
+st.write("*Locating the inflection point of the bending moment, M=0*")
+st.write(f"The inflection point of the moment is located **xi= {xi:.2f}** meters from the edge of the left footing.")
 
 MUT = 0.9 * (51/160) * fc_mp * B * 1000 * beta * d**2 * (1 - 3*beta/16)
-st.write(f"The maximum moment is located xm= {xm:.2f} meters from the edge of the left footing.")
+st.write("*Locating maximum moment at zero shear:*")
+st.write(f"The maximum moment is located **xm= {xm:.2f}** meters from the edge of the left footing.")
 st.write(f"MUD = {MUD:.2f} kN-m")
 st.write(f"MUT = {MUT:.2f} kN-m")
 if MUT > MUD:
@@ -272,12 +283,19 @@ st.write(f"rho_actual = {rho_actual:.4f}")
 st.write(f"rho_min = {rho_min:.4f}")
 st.write(f"rho_des (governs) = {rho_des:.4f}")
 
-As = rho_des * L * d * 1e6  # mm2
+As = rho_des * B * d * 1e6  # mm2
 n = math.ceil(As * 4 / (math.pi * d_b_mm**2))
 st.write(f"As = {As:.2f} mm²")
-st.warning(f"Provide {n}–{d_b_mm} mm diameter DRB both ways.")
+st.warning(f"Provide {n}–{d_b_mm} mm diameter DRB on the top along the long direction, starting {xi} meters from the left edge of the footing.")
 
-    
+st.write("")
+st.write(f"rho_min = {rho_min:.4f}")
+As = rho_min * B * d * 1e6  # mm2
+n = math.ceil(As * 4 / (math.pi * d_b_mm**2))
+st.write(f"As = {As:.2f} mm²")
+st.warning(f"Provide {n}–{d_b_mm} mm diameter on the bottom along the long direction, within  {xi} meters from the left edge of the footing.")
+
+
 
 
 
