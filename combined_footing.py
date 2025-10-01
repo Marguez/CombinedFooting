@@ -237,7 +237,7 @@ def trap():
     Am = P_U1/q
     a = (B2-B1)/L
     b= B1/L +B1
-    c = 2Am
+    c = 2*Am
     xi1= min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
     xi2= max(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
 
