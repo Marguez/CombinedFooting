@@ -69,12 +69,12 @@ st.write(f"Resultant Force = {R:.2f} kN")
 #Solving for the Rectangular Centroid
 st.write(f"***Solving for the centroid***")
 if P2 > P1:
-    CASE= to the right of the second column's outer face.
+    CASE= "to the right of the second column's outer face."
     st.write(f"*From the center of the first column to the right:*")
     x= round(P2*D/R, 2)
     L_2= round (x + x1, 2)
 else:
-    CASE = to the left of the first column's outer face.
+    CASE = "to the left of the first column's outer face."
     st.write(f"*From the center of the second column to the left:*")
     x= round(P1*D/R, 2)
     L_2= round (x + x2, 2)
