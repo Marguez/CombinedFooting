@@ -231,6 +231,7 @@ else:
 
 st.write("")
 st.subheader("Reinforcement (Flexural) Design")
+st.write(f"*ALONG THE LONG DIRECTION:*")
 xm= round(P_U1/w,2)
 
 if LR == 2:
@@ -245,7 +246,7 @@ if LR == 1:
     a = 0.5*w
     b= -P_U1
     c = P_U1*cx1/2
-    xi= min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
+    xi1= min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
     xi2= max(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
 
 if fc_mp <= 28:
@@ -297,9 +298,45 @@ n = math.ceil(As * 4 / (math.pi * d_b_mm**2))
 st.write(f"As = {As:.2f} mm²")
 st.warning(f"Provide {n}–{d_b_mm} mm diameter on the bottom along the long direction, from the left edge of the footing to {xi1:.2f} meters and from {xi2:.2f} meters to the right edge of the footing.")
 
+#Along the short direction
+st.write(f"*ALONG THE SHORT DIRECTION:*")
+x = (B - cy1) / 2
+MUD = 0.5 * w * x**2
+st.write(f"x = {x:.2f} m.")
+st.write(f"WU = {WU:.2f} kN/m²")
+st.write(f"MUD = {MUD:.2f} kN-m")
+MUTx = 0.9 * (51/160) * fc_mp * L * 1000 * beta * d**2 * (1 - 3*beta/16)
 
+st.write(f"MUT = {MUTx:.2f} kN-m")
 
-
+if MUTx > MUD:
+    st.write(f"*Since MUT > MUD, tension-controlled (phi = 0.9)*")
+    phi = 0.9
+else:
+    st.write(f"*Since MUT <= MUD, transition region (phi = assumed 0.75)*")
+    phi = 0.75
+Rn = round(MUD * 1e6 / (phi * L * d**2 * 1e9), 3)
+tmp = 1 - 2*Rn/(0.85*fc_mp)
+rho_actual = 0.0
+if tmp >= 0:
+    rho_actual = round(0.85 * fc_mp / fy_mp * (1 - math.sqrt(tmp)), 4)
+rho_min = round(max(1.4/fy_mp, 0.25 * math.sqrt(fc_mp) / fy_mp), 4)
+rho_des = max(rho_actual, rho_min)
+As = rho_des * L * d * 1e6
+nx = As * 4 / (math.pi * d_b_mm**2)
+    
+st.write(f"Rn = {Rn:.3f}")
+st.write(f"rho_actual = {rho_actual:.4f}")
+st.write(f"rho_min = {rho_min:.4f}")
+st.write(f"rho_des (governs) = {rho_des:.4f}")
+st.write(f"As = {As:.2f} mm²")
+st.write(f"n = {nx:.2f} along the short-direction")
+nxb = math.ceil(2*nx/(L/B+1))
+nxs = math.ceil((nx-nxb)/2)*2
+nx = nxb+nxs
+nz = math.ceil(nz)
+st.warning(f"Along short direction: Provide **{nx}–{d_b_mm} mm diameter DRB**, "
+f"**{nxb}** within the {B}-m band and **{nxs/2}** each side outside the band.")
 
 
 
