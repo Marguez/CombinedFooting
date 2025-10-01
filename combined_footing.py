@@ -25,14 +25,14 @@ D = st.sidebar.number_input("Center to center distance between columns", min_val
 st.sidebar.caption("For **first** column:")
 P_D1 = st.sidebar.number_input("Dead axial load P_D1 (kN)", value=200.0, step=10.0, format="%.2f")
 P_L1 = st.sidebar.number_input("Live axial load P_L1 (kN)", value=100.0, step=10.0, format="%.2f")
-cx1 = st.sidebar.number_input("Column width 1 cx (m)", value=0.30, step=0.1, format="%.3f")
-cy1 = st.sidebar.number_input("Column length 1 cy (m)", value=0.30, step=0.1, format="%.3f")
+cx1 = st.sidebar.number_input("Column 1 width cx (m)", value=0.30, step=0.1, format="%.3f")
+cy1 = st.sidebar.number_input("Column 1 length cy (m)", value=0.30, step=0.1, format="%.3f")
 
 st.sidebar.caption("For **second** column:")
 P_D2 = st.sidebar.number_input("Dead axial load P_D2 (kN)", value=200.0, step=10.0, format="%.2f")
 P_L2 = st.sidebar.number_input("Live axial load P_L2 (kN)", value=100.0, step=10.0, format="%.2f")
-cx2 = st.sidebar.number_input("Column width 2 cx (m)", value=0.30, step=0.1, format="%.3f")
-cy2 = st.sidebar.number_input("Column length 2 cy (m)", value=0.30, step=0.1, format="%.3f")
+cx2 = st.sidebar.number_input("Column 2 width cx (m)", value=0.30, step=0.1, format="%.3f")
+cy2 = st.sidebar.number_input("Column 2 length cy (m)", value=0.30, step=0.1, format="%.3f")
 
 st.sidebar.caption("Required distance of the footing's edge from the column's center:")
 x1= st.sidebar.number_input("To the left of P1 (m)", min_value=cx1/2, value=cx1/2, step=0.1, format="%.2f")
@@ -112,10 +112,64 @@ def trap():
     B2= math.ceil((SumB - B1) / 0.05) * 0.05
     st.write(f"**B1 = {B1:.2f} m.**")
     st.write(f"**B2 = {B2:.2f} m.**")
-    
 
+    st.subheader("Footing thickness adequacy — One-Way Shear (Beam Shear)")
+
+    P_U1  = 1.2 * P_D1  + 1.6 * P_L1
+    P_U2  = 1.2 * P_D2  + 1.6 * P_L2
+    R_U = P_U1 + P_U2
+    A= 0.5*(B1+B2)*L
+    q= round(R_U/A,2)
+    d = round((t * 1000.0 - cc_mm - d_b_mm / 2.0) / 1000.0,3)
+    if d <= 0:
+        st.error(f"Effective depth d = {d:.4f} m is non-positive. Check t, cc_mm, d_b_mm.")
+        st.stop()
+    else:
+        st.write(f"A = {A:.2f} m².")
+        st.write(f"d = {d:.3f} m")
     
-    st.stop()
+    st.write(f"P_U1 = {P_U1:.2f} kN, P_U2 = {P_U2:.2f} kN, and R_U = {R_U:.2f} kN")
+    st.write(f"Unifommly distributed pressure, q_u = {q} kN/m")
+    st.write("")
+
+    xvd1 = round(x1 + cx1/2 + d,3)
+    xvd2 = round(x1 + D - cx2/2 - d,3)
+    B3 = B1 - (B1 - B2) * (xvd1) / L
+    B4 = B1 - (B1 - B2) * (xvd2) / L
+    
+    VUD1= abs(P_U1- q*xvd1*(0.5*(B1 + B3)))
+    Vd1 = VUD1*1000/(0.75*B3*1000*d*1000)
+    VUD2 = abs(P_U1- q*xvd2*(0.5*(B1 + B4)))
+    Vd2 = VUD2*1000/(0.75*B4*1000*d*1000)
+    
+    Vda= fc_mp**0.5/6
+    st.write(f"**Allowable Shear Stress: {Vda:.2f} MPa.**")
+    
+    st.write("*Critical point from the left edge of the footing:*")
+    st.write(f"xvd1 = {xvd1:.3f} m.")
+    st.write(f"VUD1 = {VUD1:.2f} kN.")
+    st.write(f"Vd1 = {Vd1:.2f} MPa.")
+    if Vda > Vd1:
+        st.success("One-way shear: SAFE.")
+    else:
+        st.error("One-way shear: NOT SAFE.")
+    st.write("")
+
+    st.write("*Critical point from the left edge of the footing:*")
+
+    st.write(f"xvd2 = {xvd2:.3f} m.")
+    st.write(f"VUD2 = {VUD2:.2f} kN.")
+    st.write(f"Vd2 = {Vd2:.2f} MPa.")
+    if Vda > Vd2:
+        st.success("One-way shear: SAFE.")
+    else:
+        st.error("One-way shear: NOT SAFE.")
+    
+    st.write("")
+    st.subheader("Footing thickness adequacy — Two-Way Shear (Punching Shear)"
+    
+    st.stop
+
 
 
 if L >= L_min and L < L_max:
