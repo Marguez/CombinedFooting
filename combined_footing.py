@@ -166,7 +166,7 @@ def trap():
         st.error("One-way shear: NOT SAFE.")
     
     st.write("")
-    st.subheader("Footing thickness adequacy — Two-Way Shear (Punching Shear)"
+    st.subheader("Footing thickness adequacy — Two-Way Shear (Punching Shear)")
     
     st.stop
 
