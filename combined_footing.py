@@ -92,7 +92,20 @@ st.write(f"L_max = {L_max:.2f} m.")
 
 #Computing for Trapezoidal Footing
 def trap():
-    st.write(f"test")
+    st.write(f"***Solving as a trapezoidal combined footing***")
+    L = L_max
+    q_e = q_a - gamma_s * (d_f - t) - gamma_c * t
+    SumB= 2*R/(q_e*L)
+    st.write(f"Effective bearing capacity q_e = {q_e:.2f} kPa")
+    st.write(f"B1 +B2 = {SumB:.2f} m.")
+    
+    if P1 > P2:
+        st.write(f"*From the center of the first column to the right, the centroid is:*")
+        x= D-x
+    st.write(f"x = {x:.2f} m.")
+
+
+    
     st.stop()
 
 
