@@ -238,13 +238,13 @@ if LR == 2:
     a = 0.5*w
     b= -P_U1
     c = P_U1 +s+cx1/2
-    xi= max(( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a))
+    xi= min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
 if LR == 1:
     MUD= abs(0.5*w*xm**2- P_U1*(xm-cx1/2))
     a = 0.5*w
     b= -P_U1
     c = P_U1*cx1/2
-    xi= max(( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a))
+    xi= min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
 
 if fc_mp <= 28:
     beta = 0.85
@@ -286,14 +286,14 @@ st.write(f"rho_des (governs) = {rho_des:.4f}")
 As = rho_des * B * d * 1e6  # mm2
 n = math.ceil(As * 4 / (math.pi * d_b_mm**2))
 st.write(f"As = {As:.2f} mm²")
-st.warning(f"Provide {n}–{d_b_mm} mm diameter DRB on the top along the long direction, starting {xi} meters from the left edge of the footing.")
+st.warning(f"Provide {n}–{d_b_mm} mm diameter DRB on the top along the long direction, starting {xi:.2f} meters from the left edge of the footing.")
 
 st.write("")
 st.write(f"rho_min = {rho_min:.4f}")
 As = rho_min * B * d * 1e6  # mm2
 n = math.ceil(As * 4 / (math.pi * d_b_mm**2))
 st.write(f"As = {As:.2f} mm²")
-st.warning(f"Provide {n}–{d_b_mm} mm diameter on the bottom along the long direction, within  {xi} meters from the left edge of the footing.")
+st.warning(f"Provide {n}–{d_b_mm} mm diameter on the bottom along the long direction, within  {xi:.2f} meters from the left edge of the footing.")
 
 
 
