@@ -57,6 +57,7 @@ d_b_mm = st.sidebar.number_input("Main bar diameter d_b (mm)", min_value=6, valu
 cc_mm  = st.sidebar.number_input("Clear cover cc (mm)", min_value=5, value=50, step=1, format="%d")
 st.sidebar.write(f"*Covering: {cc_mm + d_b_mm/2} mm.*")
 
+st.subheader("Determining combined footing dimensions.")
 # Service combos
 P1 = P_D1 + P_L1
 P2 = P_D2 + P_L2
@@ -67,7 +68,7 @@ st.write(f"P2 = {P2:.2f} kN")
 st.write(f"Resultant Force = {R:.2f} kN")
 
 #Solving for the Rectangular Centroid
-st.write(f"***Solving for the centroid***")
+st.write(f"***Solving for the centroid and the footing's length***")
 if P2 > P1:
     CASE= "to the right of the second column's outer face."
     st.write(f"*From the center of the first column to the right:*")
@@ -82,8 +83,8 @@ else:
 st.write(f"x = {x:.2f} m.")
 st.write(f"L/2 = {L_2:.2f} m.")
 L= L_2 * 2
-st.write(f"L = {L:.2f} m., say {round(L, 1)}")
-L = round(L, 1)
+st.write(f"**Footings Length, L = {L:.3f} m., say {round(L, 2)}**")
+L = round(L, 2)
 L_min = D + 0.5*(cx1 + cx2)
 st.write(f"L_min = {L_min:.2f} m.")
     
@@ -93,10 +94,20 @@ if L >= L_min:
     if s =! 0:
         st.write(f"Extend the footing s= {s} meters {CASE}")
     else:
-        st.write("s= 0, columns can be on the edge of the footing.)
+        st.write("s= 0, columns can be on the edge of the footing.")
 else:
     st.error(f"Computed L is less than the minimum length.")
     st.stop()
+    
+st.write(f"***Solving for the footing's width***")
+# effective bearing capacity
+q_e = q_a - gamma_s * (d_f - t) - gamma_c * t
+B = R/ (q_e*L)
+st.write(f"Effective bearing capacity q_e = {q_e:.2f} kPa")
+st.write(f"**Footings Width, B = {B:.3f} m., say {math.ceil(B / 0.05) * 0.05}**")
+
+
+
 
 
 
