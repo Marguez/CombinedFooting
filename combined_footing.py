@@ -133,12 +133,12 @@ if LR==1:
     xvd1 = round(x1 + cx1/2 + d,2)
     xvd2 = round(x1 + D - cx2/2 - d,2)
     VUD1= abs(w* xvd1 - P_U1)
-    Vd1 = VUD1*1000/(0.75*B*1000*d**2*1e6)
+    Vd1 = VUD1*1000/(0.75*B*1000*d*1000)
     VUD2 = abs(w* xvd2 - P_U1)
-    Vd2 = VUD2*1000/(0.75*B*1000*d**2*1e6)
+    Vd2 = VUD2*1000/(0.75*B*1000*d*1000)
     
     Vda= fc_mp**0.5/6
-    st.write(f"Allowable Shear Stress: {Vda:.2f} MPa")
+    st.write(f"**Allowable Shear Stress: {Vda:.2f} MPa.**")
     
     st.write("*Critical point to the right of column 1:*")
     st.write(f"xvd1 = {xvd1:.3f} m.")
