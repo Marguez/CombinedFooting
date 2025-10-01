@@ -87,7 +87,7 @@ L = round(L, 1)
 L_min = D + 0.5*(cx1 + cx2)
 st.write(f"L_min = {L_min:.2f} m.")
     
-if L > L_min:
+if L >= L_min:
     st.write(f"CHECK: L is greater than the minimum length.")
     s= L-L_min
     st.write(f"Extend the footing s, {s} meters {CASE}")
