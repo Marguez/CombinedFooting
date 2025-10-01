@@ -144,14 +144,14 @@ def trap():
     st.write(f"Unifommly distributed pressure, q_u = {q} kN/m")
     st.write("")
 
-    xvd1 = round(x1 + cx1/2 + d,3)
-    xvd2 = round(x1 + D - cx2/2 - d,3)
+    xvd1 = round(x1 + cx1/2 + d,2)
+    xvd2 = round(x1 + D - cx2/2 - d,2)
     B3 = B1 - (B1 - B2) * (xvd1) / L
     B4 = B1 - (B1 - B2) * (xvd2) / L
     
-    VUD1= abs(P_U1- q*xvd1*(0.5*(B1 + B3)))
+    VUD1= round(abs(P_U1- q*xvd1*(0.5*(B1 + B3))),2)
     Vd1 = VUD1*1000/(0.75*B3*1000*d*1000)
-    VUD2 = abs(P_U1- q*xvd2*(0.5*(B1 + B4)))
+    VUD2 = round(abs(P_U1- q*xvd2*(0.5*(B1 + B4))),2)
     Vd2 = VUD2*1000/(0.75*B4*1000*d*1000)
     
     Vda= fc_mp**0.5/6
