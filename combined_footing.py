@@ -91,7 +91,7 @@ st.write(f"L_min = {L_min:.2f} m.")
 st.write(f"L_max = {L_max:.2f} m.")   
 
 #Computing for Trapezoidal Footing
-def trap():
+def trap(x):
     st.write(f"***Solving as a trapezoidal combined footing***")
     L = L_max
     q_e = q_a - gamma_s * (d_f - t) - gamma_c * t
