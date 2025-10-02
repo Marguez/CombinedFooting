@@ -418,7 +418,7 @@ Cyd2 = round(cy2 + d,3)
 if LR== 1:
     if Cxd2/2 <= cx2/2 + s:
         Cxd2 = Cxd2
-        Bo1 = round(2*(Cxd2 + Cyd2),3)
+        Bo2 = round(2*(Cxd2 + Cyd2),3)
     else:
         Cxd2 = round(cx2/2 + s + Cxd2/2,3)
         Bo2 = round(2 * Cxd2 + Cyd2,3)
