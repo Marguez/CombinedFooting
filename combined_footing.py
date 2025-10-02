@@ -83,7 +83,7 @@ else:
 st.write(f"x = {x:.2f} m.")
 st.write(f"L/2 = {L_2:.2f} m.")
 L= L_2 * 2
-st.write(f"**Footing's Length, L = {L:.3f} m., say {math.ceil(L / 0.05) * 0.05}**")
+st.write(f"**Footing's Length, L = {L:.3f} m., say {math.ceil(L / 0.05) * 0.05:.2f}**")
 L = math.ceil(L / 0.05) * 0.05
 L_min = D + 0.5*(cx1 + cx2)
 st.write(f"L_min = {L_min:.3f} m.")
