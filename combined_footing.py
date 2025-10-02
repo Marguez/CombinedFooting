@@ -384,7 +384,7 @@ st.write("*For column 1*")
 Cxd1 = round(cx1 + d,3)
 Cyd1 = round(cy1 + d,3)
 if LR== 2:
-    if Cxd1/2 >= cx1/2 + s:
+    if Cxd1/2 <= cx1/2 + s:
         Cxd1 = Cxd1
         Bo1 = round(2*(Cxd1 + Cyd1),3)
     else:
@@ -416,7 +416,7 @@ st.write("*For column 2*")
 Cxd2 = round(cx2 + d,3)
 Cyd2 = round(cy2 + d,3)
 if LR== 1:
-    if Cxd2/2 >= cx2/2 + s:
+    if Cxd2/2 <= cx2/2 + s:
         Cxd2 = Cxd2
         Bo1 = round(2*(Cxd2 + Cyd2),3)
     else:
