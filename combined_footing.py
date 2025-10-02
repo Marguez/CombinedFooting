@@ -131,8 +131,6 @@ def trap():
 
     P_U1  = 1.2 * P_D1  + 1.6 * P_L1
     P_U2  = 1.2 * P_D2  + 1.6 * P_L2
-    P_U1 = 1183.4
-    P_U2 = 1998.4
     R_U = P_U1 + P_U2
     A= round(0.5*(B1+B2)*L,2)
     q= round(R_U/A,2)
@@ -330,6 +328,8 @@ st.subheader("Footing thickness adequacy — One-Way Shear (Beam Shear)")
 
 P_U1  = 1.2 * P_D1  + 1.6 * P_L1
 P_U2  = 1.2 * P_D2  + 1.6 * P_L2
+P_U1 = 1183.4
+P_U2 = 1998.4
 R_U = P_U1 + P_U2
 w= round(R_U/L,2)
 d = round((t * 1000.0 - cc_mm - d_b_mm / 2.0) / 1000.0,2)
