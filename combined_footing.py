@@ -58,8 +58,6 @@ st.subheader("Determining combined footing dimensions.")
 # Service combos
 P1 = P_D1 + P_L1
 P2 = P_D2 + P_L2
-P1 = 1285.43
-P2 = 2092.57
 R= P1 + P2
 
 st.write(f"P1 = {P1:.2f} kN")
@@ -328,8 +326,6 @@ st.subheader("Footing thickness adequacy — One-Way Shear (Beam Shear)")
 
 P_U1  = 1.2 * P_D1  + 1.6 * P_L1
 P_U2  = 1.2 * P_D2  + 1.6 * P_L2
-P_U1 = 1183.4
-P_U2 = 1998.4
 R_U = P_U1 + P_U2
 w= round(R_U/L,2)
 d = round((t * 1000.0 - cc_mm - d_b_mm / 2.0) / 1000.0,2)
