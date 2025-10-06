@@ -125,16 +125,38 @@ else:
 #Computing for Trapezoidal Footing
 def strapcom():
     st.subheader("Solving as a strap footing.")
+    st.write(f"P1 = {P1:.2f} kN")
+    st.write(f"P2 = {P2:.2f} kN")
+    st.write(f"Resultant Force = {R:.2f} kN")
+    st.write("")
     if side == "Left":
         Lr= round(D + x1 - givenB/2,3)
         st.write(f"The distance between the center of the footings is {Lr} m.")
         R1 = P1*D/Lr
         st.write(f"Summing moment about the center of the second footing, R1 = {R1:.2f} kN.")
         st.write(f"Considering, effective bearing capacity q_e = {q_e:.2f} kPa,")
-        B1= round(R1/ givenB/ q_e,2)
-        st.write(f"The other dimension of the first column is B1= {B1} m., say {math.ceil(B1 / 0.05) * 0.05} m.")
+        B1= round(R1/ givenB/ q_e,3)
+        st.write(f"The other dimension of the first footing is B1= {B1} m., say {math.ceil(B1 / 0.05) * 0.05} m.")
         B1 = math.ceil(B1 / 0.05) * 0.05
-        
+        R2 = R-R1
+        B2= (R2/q_e)**0.5
+        st.write(f"Summing forces, R2 = {R2:.2f} kN.")
+        st.write(f"Assuming the second column is square, B2=L2= {B2:.2f} m., say {math.ceil(B2 / 0.05) * 0.05} m.")
+        B2 = math.ceil(B2 / 0.05) * 0.05
+    if side == "Right":
+        Lr= round(D + x2 - givenB/2,3)
+        st.write(f"The distance between the center of the footings is {Lr} m.")
+        R2 = P2*D/Lr
+        st.write(f"Summing moment about the center of the second footing, R2 = {R2:.2f} kN.")
+        st.write(f"Considering, effective bearing capacity q_e = {q_e:.2f} kPa,")
+        B2= round(R2/ givenB/ q_e,3)
+        st.write(f"The other dimension of the second footing is B2= {B2} m., say {math.ceil(B2 / 0.05) * 0.05} m.")
+        B2 = math.ceil(B2 / 0.05) * 0.05
+        R1 = R-R2
+        B1= (R1/q_e)**0.5
+        st.write(f"Summing forces, R1 = {R1:.2f} kN.")
+        st.write(f"Assuming the second column is square, B1=L1= {B1:.2f} m., say {math.ceil(B1 / 0.05) * 0.05} m.")
+        B2 = math.ceil(B1 / 0.05) * 0.05
         
         
 
