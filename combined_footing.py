@@ -125,7 +125,7 @@ else:
 #Computing for Trapezoidal Footing
 def strapcom():
     st.subheader("Solving as a strap footing.")
-    if side == Left:
+    if side == "Left":
         Lr= round(D + x1/2 - givenB/2,3)
         st.write(f"The distance between the center of the footings is {Lr} m.")
         R1 = P1*D/Lr
