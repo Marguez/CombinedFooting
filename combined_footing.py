@@ -64,7 +64,7 @@ if strap:
     )
 
     # Input for initial width
-    initial_width = st.sidebar.number_input(
+    GivenB = st.sidebar.number_input(
         "Enter initial width (m):",
         min_value=0.1,
         step=0.1,
@@ -121,6 +121,10 @@ else:
     else:
         L_max = D + x1 + x2
         st.write(f"L_max = {L_max:.3f} m.")   
+
+#Computing for Trapezoidal Footing
+def strap():
+    st.write(f"***Solving as a strap footing***")
 
 #Computing for Trapezoidal Footing
 def trap():
@@ -567,26 +571,8 @@ nxs = math.ceil((nx-nxb)/2)*2
 nx = nxb+nxs
 st.warning(f"Along short direction: Provide **{nx}–{d_b_mm} mm diameter DRB**")
 
-if strap:
-    # Dropdown for side selection
-    side = st.selectbox(
-        "Select the footing with a given dimension:",
-        options=["Left", "Right"]
-    )
+strap()
 
-    # Input for initial width
-    initial_width = st.number_input(
-        "Enter initial width (m):",
-        min_value=0.1,
-        step=0.1,
-        format="%.2f"
-    )
-
-    
-    
-    st.stop()
-else:
-    st.info("ℹ️ Strap footing computation is turned off.")
 
 
 
