@@ -319,8 +319,13 @@ def trap():
     st.warning(f"Provide {n}–{d_b_mm} mm diameter DRB on the top of the footing.")
     
     st.write("")
+    if strap:
+        strap()
+        st.stop()
+    else:
+        st.stop()
     
-    st.stop()
+    
 
 
 
@@ -571,7 +576,10 @@ nxs = math.ceil((nx-nxb)/2)*2
 nx = nxb+nxs
 st.warning(f"Along short direction: Provide **{nx}–{d_b_mm} mm diameter DRB**")
 
-strap()
+if strap:
+    strap()
+else:
+    st.stop()
 
 
 
