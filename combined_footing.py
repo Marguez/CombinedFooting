@@ -58,13 +58,13 @@ strap = st.sidebar.toggle("Do you want to compute for the strap footing?")
 
 if strap:
     # Dropdown for side selection
-    side = st.selectbox(
+    side = st.sidebar.selectbox(
         "Select the footing with a given dimension:",
         options=["Left", "Right"]
     )
 
     # Input for initial width
-    initial_width = st.number_input(
+    initial_width = st.sidebar.number_input(
         "Enter initial width (m):",
         min_value=0.1,
         step=0.1,
@@ -72,7 +72,7 @@ if strap:
     )
 
 else:
-    st.info("ℹ️ Strap footing computation is turned off.")
+    st.sidebar.info("ℹ️ Strap footing computation is turned off.")
 
 st.subheader("Determining combined footing dimensions.")
 # Service combos
