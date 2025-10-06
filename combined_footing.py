@@ -64,7 +64,7 @@ if strap:
     )
 
     # Input for initial width
-    GivenB = st.sidebar.number_input(
+    givenB = st.sidebar.number_input(
         "Enter initial width (m):",
         min_value=0.1,
         step=0.1,
@@ -125,6 +125,18 @@ else:
 #Computing for Trapezoidal Footing
 def strapcom():
     st.subheader("Solving as a strap footing.")
+    if side == Left:
+        Lr= round(D + x1/2 - givenB/2,3)
+        st.write(f"The distance between the center of the footings is {Lr} m.")
+        R1 = P1*D/Lr
+        st.write(f"Summing moment about the center of the second footing, R1 = {R1} kN.")
+        st.write(f"Considering, effective bearing capacity q_e = {q_e:.2f} kPa,")
+        B1= round(R1/ givenB/ q_e,2)
+        st.write(f"The other dimension of the first column is B1= {B1} m., say {math.ceil(B1 / 0.05) * 0.05} m.")
+        B1 = math.ceil(B1 / 0.05) * 0.05
+        
+        
+        
 
 #Computing for Trapezoidal Footing
 def trap():
