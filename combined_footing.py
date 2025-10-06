@@ -54,6 +54,26 @@ d_b_mm = st.sidebar.number_input("Main bar diameter d_b (mm)", min_value=6, valu
 cc_mm  = st.sidebar.number_input("Clear cover cc (mm)", min_value=5, value=50, step=1, format="%d")
 st.sidebar.write(f"*Covering: {cc_mm + d_b_mm/2} mm.*")
 
+strap = st.sidebar.toggle("Do you want to compute for the strap footing?")
+
+if strap:
+    # Dropdown for side selection
+    side = st.selectbox(
+        "Select the footing with a given dimension:",
+        options=["Left", "Right"]
+    )
+
+    # Input for initial width
+    initial_width = st.number_input(
+        "Enter initial width (m):",
+        min_value=0.1,
+        step=0.1,
+        format="%.2f"
+    )
+
+else:
+    st.info("ℹ️ Strap footing computation is turned off.")
+
 st.subheader("Determining combined footing dimensions.")
 # Service combos
 P1 = P_D1 + P_L1
@@ -295,27 +315,8 @@ def trap():
     st.warning(f"Provide {n}–{d_b_mm} mm diameter DRB on the top of the footing.")
     
     st.write("")
-    strap = st.toggle("Do you want to compute for the strap footing?")
-
-    if strap:
-        # Dropdown for side selection
-        side = st.selectbox(
-            "Select strap side:",
-            options=["Left", "Right"]
-        )
     
-        # Input for initial width
-        initial_width = st.number_input(
-            "Enter initial width (m):",
-            min_value=0.1,
-            step=0.1,
-            format="%.2f"
-        )
-
-    else:
-        st.info("ℹ️ Strap footing computation is turned off.")
-        
-        st.stop()
+    st.stop()
 
 
 
@@ -566,7 +567,26 @@ nxs = math.ceil((nx-nxb)/2)*2
 nx = nxb+nxs
 st.warning(f"Along short direction: Provide **{nx}–{d_b_mm} mm diameter DRB**")
 
+if strap:
+    # Dropdown for side selection
+    side = st.selectbox(
+        "Select the footing with a given dimension:",
+        options=["Left", "Right"]
+    )
 
+    # Input for initial width
+    initial_width = st.number_input(
+        "Enter initial width (m):",
+        min_value=0.1,
+        step=0.1,
+        format="%.2f"
+    )
+
+    
+    
+    st.stop()
+else:
+    st.info("ℹ️ Strap footing computation is turned off.")
 
 
 
