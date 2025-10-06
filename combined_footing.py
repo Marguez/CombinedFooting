@@ -123,7 +123,7 @@ else:
         st.write(f"L_max = {L_max:.3f} m.")   
 
 #Computing for Trapezoidal Footing
-def strap():
+def strapcom():
     st.subheader("Solving as a strap footing.")
 
 #Computing for Trapezoidal Footing
