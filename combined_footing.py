@@ -320,7 +320,7 @@ def trap():
     
     st.write("")
     if strap:
-        strap()
+        strapcom()
         st.stop()
     else:
         st.stop()
@@ -577,7 +577,7 @@ nx = nxb+nxs
 st.warning(f"Along short direction: Provide **{nx}–{d_b_mm} mm diameter DRB**")
 
 if strap:
-    strap()
+    strapcom()
 else:
     st.stop()
 
