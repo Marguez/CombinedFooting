@@ -124,7 +124,7 @@ else:
 
 #Computing for Trapezoidal Footing
 def strap():
-    st.write(f"***Solving as a strap footing***")
+    st.subheader("Solving as a strap footing.")
 
 #Computing for Trapezoidal Footing
 def trap():
