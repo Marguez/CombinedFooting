@@ -295,8 +295,27 @@ def trap():
     st.warning(f"Provide {n}–{d_b_mm} mm diameter DRB on the top of the footing.")
     
     st.write("")
+    strap = st.toggle("Do you want to compute for the strap footing?")
+
+    if strap:
+        # Dropdown for side selection
+        strap_side = st.selectbox(
+            "Select strap side:",
+            Side=["Left", "Right"]
+        )
     
-    st.stop()
+        # Input for initial width
+        initial_width = st.number_input(
+            "Enter initial width (m):",
+            min_value=0.1,
+            step=0.1,
+            format="%.2f"
+        )
+
+    else:
+        st.info("ℹ️ Strap footing computation is turned off.")
+        
+        st.stop()
 
 
 
