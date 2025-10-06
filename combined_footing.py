@@ -299,9 +299,9 @@ def trap():
 
     if strap:
         # Dropdown for side selection
-        strap_side = st.selectbox(
+        side = st.selectbox(
             "Select strap side:",
-            Side=["Left", "Right"]
+            options=["Left", "Right"]
         )
     
         # Input for initial width
