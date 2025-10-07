@@ -78,6 +78,9 @@ st.subheader("Determining combined footing dimensions.")
 # Service combos
 P1 = P_D1 + P_L1
 P2 = P_D2 + P_L2
+P1 = 1307.14
+P2 = 2114.29
+q_a = 4*280/3
 R= P1 + P2
 
 st.write(f"P1 = {P1:.2f} kN")
