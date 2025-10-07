@@ -137,12 +137,12 @@ def strapcom():
         st.write(f"Summing moment about the center of the second footing, R1 = {R1:.2f} kN.")
         st.write(f"Considering, effective bearing capacity q_e = {q_e:.2f} kPa,")
         B1= round(R1/ givenB/ q_e,3)
-        st.write(f"The other dimension of the first footing is B1= {B1} m., say {math.ceil(B1 / 0.05) * 0.05} m.")
+        st.write(f"The other dimension of the first footing is B1= {B1} m., say {math.ceil(B1 / 0.05) * 0.05:.2f} m.")
         B1 = math.ceil(B1 / 0.05) * 0.05
         R2 = R-R1
         B2= (R2/q_e)**0.5
         st.write(f"Summing forces, R2 = {R2:.2f} kN.")
-        st.write(f"Assuming the second column is square, B2=L2= {B2:.2f} m., say {math.ceil(B2 / 0.05) * 0.05} m.")
+        st.write(f"Assuming the second column is square, B2=L2= {B2:.2f} m., say {math.ceil(B2 / 0.05) * 0.05:.2f} m.")
         B2 = math.ceil(B2 / 0.05) * 0.05
     if side == "Right":
         Lr= round(D + x2 - givenB/2,3)
@@ -151,7 +151,7 @@ def strapcom():
         st.write(f"Summing moment about the center of the second footing, R2 = {R2:.2f} kN.")
         st.write(f"Considering, effective bearing capacity q_e = {q_e:.2f} kPa,")
         B2= round(R2/ givenB/ q_e,3)
-        st.write(f"The other dimension of the second footing is B2= {B2} m., say {math.ceil(B2 / 0.05) * 0.05} m.")
+        st.write(f"The other dimension of the second footing is B2= {B2} m., say {math.ceil(B2 / 0.05) * 0.05:.2f} m.")
         B2 = math.ceil(B2 / 0.05) * 0.05
         R1 = R-R2
         B1= (R1/q_e)**0.5
