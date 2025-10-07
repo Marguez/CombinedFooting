@@ -124,6 +124,7 @@ else:
 
 #Computing for Trapezoidal Footing
 def strapcom():
+    global q_e
     st.subheader("Solving as a strap footing.")
     st.write(f"P1 = {P1:.2f} kN")
     st.write(f"P2 = {P2:.2f} kN")
