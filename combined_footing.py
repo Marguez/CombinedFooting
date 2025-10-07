@@ -78,9 +78,6 @@ st.subheader("Determining combined footing dimensions.")
 # Service combos
 P1 = P_D1 + P_L1
 P2 = P_D2 + P_L2
-P1 = 1307.14
-P2 = 2114.29
-q_a = 4*280/3
 R= P1 + P2
 
 st.write(f"P1 = {P1:.2f} kN")
@@ -158,7 +155,7 @@ def strapcom():
         R1 = R-R2
         B1= (R1/q_e)**0.5
         st.write(f"Summing forces, R1 = {R1:.2f} kN.")
-        st.write(f"Assuming the second column is square, B1=L1= {B1:.2f} m., say {math.ceil(B1 / 0.05) * 0.05} m.")
+        st.write(f"Assuming the second column is square, B1=L1= {B1:.2f} m., say {math.ceil(B1 / 0.05) * 0.05:.2f} m.")
         B2 = math.ceil(B1 / 0.05) * 0.05
         
         
