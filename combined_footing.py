@@ -163,7 +163,7 @@ def strapcom():
 
 #Computing for Trapezoidal Footing
 def trap():
-    global x, x1
+    global x, x1, q_e
     st.write(f"***Solving as a trapezoidal combined footing***")
     L = L_max
     q_e = q_a - gamma_s * (d_f - t) - gamma_c * t
