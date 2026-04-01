@@ -12,16 +12,606 @@ import streamlit as st
 import math
 import pandas as pd
 
-st.set_page_config(page_title="Optimize Splice", layout="wide")
-st.title("Beam Rebar Splice Optimization")
+st.set_page_config(page_title="Combined Footing Design Calculator", layout="wide")
+st.title("Combined Footing Design Calculator — Area, Shear & Reinforcement")
+
+# ---------------------------
+# Sidebar: Inputs
+# ---------------------------
+st.sidebar.header("Input parameters (SI units)")
+
+D = st.sidebar.number_input("Center to center distance between columns", min_value=0.0, value=5.0, step=0.5, format="%.3f")
+
+st.sidebar.caption("For **first** column:")
+P_D1 = st.sidebar.number_input("Dead axial load P_D1 (kN)", value=200.0, step=10.0, format="%.2f")
+P_L1 = st.sidebar.number_input("Live axial load P_L1 (kN)", value=100.0, step=10.0, format="%.2f")
+cx1 = st.sidebar.number_input("Column 1 width cx (m)", value=0.30, step=0.1, format="%.3f")
+cy1 = st.sidebar.number_input("Column 1 length cy (m)", value=0.30, step=0.1, format="%.3f")
+
+st.sidebar.caption("For **second** column:")
+P_D2 = st.sidebar.number_input("Dead axial load P_D2 (kN)", value=200.0, step=10.0, format="%.2f")
+P_L2 = st.sidebar.number_input("Live axial load P_L2 (kN)", value=100.0, step=10.0, format="%.2f")
+cx2 = st.sidebar.number_input("Column 2 width cx (m)", value=0.30, step=0.1, format="%.3f")
+cy2 = st.sidebar.number_input("Column 2 length cy (m)", value=0.30, step=0.1, format="%.3f")
+
+st.sidebar.caption("Required distance of the footing's edge from the column's center:")
+x1= st.sidebar.number_input("To the left of P1 (m)", value=cx1/2, step=0.05, format="%.3f")
+x2= st.sidebar.number_input("To the right of P2 (m)", value=cx2/2, step=0.05, format="%.3f")
+
+
+st.sidebar.caption("Other Design Parameters:")
+t = st.sidebar.number_input("Footing thickness t (m)", min_value=0.05, value=0.50, step=0.1, format="%.3f")
+d_f = st.sidebar.number_input("Foundation depth d_f (m)", min_value=0.0, value=0.00, step=0.1, format="%.3f")
+
+gamma_s = st.sidebar.number_input("Unit weight of soil γ_s (kN/m³)", value=18.0, step=1.0, format="%.2f")
+gamma_c = st.sidebar.number_input("Unit weight of concrete γ_c (kN/m³)", value=24.0, step=0.5, format="%.2f")
+q_a = st.sidebar.number_input("Allowable soil pressure q_a (kPa)", value=200.0, step=10.0, format="%.2f")
+
+fc_mp = st.sidebar.number_input("Concrete strength fc' (MPa)", min_value=10.0, value=25.0, step=1.0, format="%.2f")
+fy_mp = st.sidebar.number_input("Yield strength of steel fy (MPa)", min_value=200.0, value=420.0, step=100.0, format="%.2f")
+
+d_b_mm = st.sidebar.number_input("Main bar diameter d_b (mm)", min_value=6, value=16, step=1, format="%d")
+cc_mm  = st.sidebar.number_input("Clear cover cc (mm)", min_value=5, value=50, step=1, format="%d")
+st.sidebar.write(f"*Covering: {cc_mm + d_b_mm/2} mm.*")
+
+strap = st.sidebar.toggle("Do you want to compute for the strap footing?")
+
+if strap:
+    # Dropdown for side selection
+    side = st.sidebar.selectbox(
+        "Select the footing with a given dimension:",
+        options=["Left", "Right"]
+    )
+
+    # Input for initial width
+    givenB = st.sidebar.number_input(
+        "Enter initial width (m):",
+        min_value=0.1,
+        step=0.1,
+        format="%.2f"
+    )
+
+else:
+    st.sidebar.info("ℹ️ Strap footing computation is turned off.")
+
+st.subheader("Determining combined footing dimensions.")
+# Service combos
+P1 = P_D1 + P_L1
+P2 = P_D2 + P_L2
+R= P1 + P2
+
+st.write(f"P1 = {P1:.2f} kN")
+st.write(f"P2 = {P2:.2f} kN")
+st.write(f"Resultant Force = {R:.2f} kN")
+st.write("")
+
+#Solving for the Rectangular Centroid
+st.write(f"***Solving for the centroid and the footing's length (rectangular)***")
+if P2 > P1:
+    LR= 1
+    CASE= "to the right of the second column's outer face."
+    st.write(f"*From the center of the first column to the right:*")
+    x= round(P2*D/R, 2)
+    L_2= round (x + x1, 2)
+else:
+    LR= 2
+    CASE = "to the left of the first column's outer face."
+    st.write(f"*From the center of the second column to the left:*")
+    x= round(P1*D/R, 2)
+    L_2= round (x + x2, 2)
+
+st.write(f"x = {x:.2f} m.")
+st.write(f"L/2 = {L_2:.2f} m.")
+L= L_2 * 2
+st.write(f"**Footing's Length, L = {L:.3f} m., say {math.ceil(L / 0.05) * 0.05:.2f}**")
+L = math.ceil(L / 0.05) * 0.05
+L_min = D + 0.5*(cx1 + cx2)
+st.write(f"L_min = {L_min:.3f} m.")
+if P2 > P1:
+    if x2 == 0:
+        L_max = 9999999
+        st.write(f"The length is not restricted to the right.") 
+    else:
+        L_max = D + x1 + x2
+        st.write(f"L_max = {L_max:.3f} m.")   
+else:
+    if x1 == 0:
+        L_max = 9999999
+        st.write(f"The length is not restricted to the left.") 
+    else:
+        L_max = D + x1 + x2
+        st.write(f"L_max = {L_max:.3f} m.")   
+
+#Computing for Trapezoidal Footing
+def strapcom():
+    global q_e
+    st.subheader("Solving as a strap footing.")
+    st.write(f"P1 = {P1:.2f} kN")
+    st.write(f"P2 = {P2:.2f} kN")
+    st.write(f"Resultant Force = {R:.2f} kN")
+    st.write("")
+    if side == "Left":
+        Lr= round(D + x1 - givenB/2,3)
+        st.write(f"The distance between the center of the footings is {Lr} m.")
+        R1 = P1*D/Lr
+        st.write(f"Summing moment about the center of the second footing, R1 = {R1:.2f} kN.")
+        st.write(f"Considering, effective bearing capacity q_e = {q_e:.2f} kPa,")
+        B1= round(R1/ givenB/ q_e,3)
+        st.write(f"The other dimension of the first footing is B1= {B1} m., say {math.ceil(B1 / 0.05) * 0.05:.2f} m.")
+        B1 = math.ceil(B1 / 0.05) * 0.05
+        R2 = R-R1
+        B2= (R2/q_e)**0.5
+        st.write(f"Summing forces, R2 = {R2:.2f} kN.")
+        st.write(f"Assuming the second column is square, B2=L2= {B2:.2f} m., say {math.ceil(B2 / 0.05) * 0.05:.2f} m.")
+        B2 = math.ceil(B2 / 0.05) * 0.05
+    if side == "Right":
+        Lr= round(D + x2 - givenB/2,3)
+        st.write(f"The distance between the center of the footings is {Lr} m.")
+        R2 = P2*D/Lr
+        st.write(f"Summing moment about the center of the second footing, R2 = {R2:.2f} kN.")
+        st.write(f"Considering, effective bearing capacity q_e = {q_e:.2f} kPa,")
+        B2= round(R2/ givenB/ q_e,3)
+        st.write(f"The other dimension of the second footing is B2= {B2} m., say {math.ceil(B2 / 0.05) * 0.05:.2f} m.")
+        B2 = math.ceil(B2 / 0.05) * 0.05
+        R1 = R-R2
+        B1= (R1/q_e)**0.5
+        st.write(f"Summing forces, R1 = {R1:.2f} kN.")
+        st.write(f"Assuming the second column is square, B1=L1= {B1:.2f} m., say {math.ceil(B1 / 0.05) * 0.05:.2f} m.")
+        B2 = math.ceil(B1 / 0.05) * 0.05
+        
+        
+
+#Computing for Trapezoidal Footing
+def trap():
+    global x, x1, q_e
+    st.write(f"***Solving as a trapezoidal combined footing***")
+    L = L_max
+    q_e = q_a - gamma_s * (d_f - t) - gamma_c * t
+    SumB= 2*R/(q_e*L)
+    st.write(f"Effective bearing capacity q_e = {q_e:.2f} kPa")
+    st.write(f"B1 + B2 = {SumB:.2f} m.")
+    
+    if P2 < P1:
+        st.write(f"*From the center of the first column to the right, the centroid is:*")
+        x= D-x
+    st.write(f"x = {x:.2f} m.")
+    st.write(f"*From the left edge of the footing to the right, the centroid is:*")
+    x_1 = x + x1
+    st.write(f"x1 = {x_1:.2f} m.")
+    B1= -(x_1 *3 / L * SumB) +2*(SumB)
+    B1= round(math.ceil(B1 / 0.05) * 0.05,2)
+    B2= round(math.ceil((SumB - B1) / 0.05) * 0.05,2)
+    st.write(f"**B1 = {B1:.2f} m.**")
+    st.write(f"**B2 = {B2:.2f} m.**")
+
+    st.subheader("Footing thickness adequacy — One-Way Shear (Beam Shear)")
+
+    P_U1  = 1.2 * P_D1  + 1.6 * P_L1
+    P_U2  = 1.2 * P_D2  + 1.6 * P_L2
+    R_U = P_U1 + P_U2
+    A= round(0.5*(B1+B2)*L,2)
+    q= round(R_U/A,2)
+    d = round((t * 1000.0 - cc_mm - d_b_mm / 2.0) / 1000.0,3)
+    if d <= 0:
+        st.error(f"Effective depth d = {d:.4f} m is non-positive. Check t, cc_mm, d_b_mm.")
+        st.stop()
+    else:
+        st.write(f"A = {A:.2f} m².")
+        st.write(f"d = {d:.3f} m")
+    
+    st.write(f"P_U1 = {P_U1:.2f} kN, P_U2 = {P_U2:.2f} kN, and R_U = {R_U:.2f} kN")
+    st.write(f"Unifommly distributed pressure, q_u = {q} kN/m")
+    st.write("")
+
+    xvd1 = round(x1 + cx1/2 + d,2)
+    xvd2 = round(x1 + D - cx2/2 - d,2)
+    B3 = B1 - (B1 - B2) * (xvd1) / L
+    B4 = B1 - (B1 - B2) * (xvd2) / L
+    
+    VUD1= round(abs(P_U1- q*xvd1*(0.5*(B1 + B3))),2)
+    Vd1 = VUD1*1000/(0.75*B3*1000*d*1000)
+    VUD2 = round(abs(P_U1- q*xvd2*(0.5*(B1 + B4))),2)
+    Vd2 = VUD2*1000/(0.75*B4*1000*d*1000)
+    
+    Vda= fc_mp**0.5/6
+    st.write(f"**Allowable Shear Stress: {Vda:.2f} MPa.**")
+    
+    st.write("*Critical point from the left edge of the footing:*")
+    st.write(f"xvd1 = {xvd1:.3f} m.")
+    st.write(f"Width B3 at this point: {B3:.2f} m.")
+    st.write(f"VUD1 = {VUD1:.2f} kN.")
+    st.write(f"Vd1 = {Vd1:.2f} MPa.")
+    if Vda > Vd1:
+        st.success("One-way shear: SAFE.")
+    else:
+        st.error("One-way shear: NOT SAFE.")
+    st.write("")
+
+    st.write("*Critical point from the left edge of the footing:*")
+
+    st.write(f"xvd2 = {xvd2:.3f} m.")
+    st.write(f"Width B4 at this point: {B4:.2f} m.")
+    st.write(f"VUD2 = {VUD2:.2f} kN.")
+    st.write(f"Vd2 = {Vd2:.2f} MPa.")
+    if Vda > Vd2:
+        st.success("One-way shear: SAFE.")
+    else:
+        st.error("One-way shear: NOT SAFE.")
+    
+    st.write("")
+    st.subheader("Footing thickness adequacy — Two-Way Shear (Punching Shear)")
+
+    st.write(f"Unifommly distributed pressure, qu = {q} kN/m")
+    st.write("")
+    Vpa = math.sqrt(fc_mp) / 3.0
+    st.write(f"**Allowable Punching Stress: {Vpa:.2f} MPa.**")
+    st.write("")
+    
+    st.write("*For column 1*")
+    Cxd1 = round(cx1 + d,3)
+    Cyd1 = round(cy1 + d,3)
+    if Cyd1 < B1:
+        if Cxd1/2 <= x1:
+            Cxd1 = Cxd1
+            Bo1 = 2*(Cxd1 + Cyd1)
+        else:
+            Cxd1 = round(x1 + Cxd1/2,3)
+            Bo1 = 2 * Cxd1 + Cyd1
+        st.write(f"Cxd1 = {Cxd1:.3f} m.")
+        st.write(f"Cyd1 = {Cyd1:.3f} m.")
+        st.write(f"Bo1 = {Bo1:.3f} m.")
+        
+        Vup1 = P_U1 - q * Cxd1 * Cyd1
+        Vp1 = Vup1 * 1000 / (0.75 * Bo1 * d * 1_000_000)
+        st.write(f"Vup1 = {Vup1:.2f} kN.")
+        st.write(f"Vp1 = {Vp1:.2f} MPa.")
+        
+        if Vpa > Vp1:
+            st.success("Two-way/punching shear: SAFE.")
+        else:
+            st.error("Two-way/punching shear: NOT SAFE.")
+            twopass = False
+    else:
+        st.error("Cyd1 is greater than B1. Punching check is not possible.")
+        
+    st.write("")
+    st.write("*For column 2*")
+    Cxd2 = round(cx2 + d,3)
+    Cyd2 = round(cy2 + d,3)
+    if Cyd2 < B2:
+        if Cxd2/2 <= x2:
+            Cxd2 = Cxd2
+            Bo2 = 2*(Cxd2 + Cyd2)
+        else:
+            Cxd2 = round(x2 + Cxd2/2,3)
+            Bo2 = 2 * Cxd2 + Cyd2
+        st.write(f"Cxd2 = {Cxd2:.3f} m.")
+        st.write(f"Cyd2 = {Cyd2:.3f} m.")
+        st.write(f"Bo2 = {Bo2:.3f} m.")
+        
+        Vup2 = P_U2 - q * Cxd2 * Cyd2
+        Vp2 = Vup2 * 1000 / (0.75 * Bo2 * d * 1_000_000)
+        st.write(f"Vup2 = {Vup2:.2f} kN.")
+        st.write(f"Vp2 = {Vp2:.2f} MPa.")
+        
+        if Vpa > Vp2:
+            st.success("Two-way/punching shear: SAFE.")
+        else:
+            st.error("Two-way/punching shear: NOT SAFE.")
+            twopass = False
+    else:
+        st.error("Cyd2 is greater than B2. Punching check is not possible.") 
+    
+    st.write("")
+    st.subheader("Reinforcement (Flexural) Design")
+
+    Am = P_U1/q
+    a = (B2-B1)/L
+    b= 2*B1
+    c = -2*Am
+    xm1= round(min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0),2)
+    xc= xm1-x1
+    Bm = round(B1 - (B1 - B2) * (xm1) / L,2)
+    MUD = P_U1*xc-.5*Bm*xm1**2*q/3 -.5*B1*xm1**2*q*2/3
+    st.write("*Locating maximum moment at zero shear:*")
+    st.write(f"The maximum moment is located **xm= {xm1:.2f}** meters, with a width, **Bm= {Bm:.2f}** meters from the edge of the left footing.")
+   
+    if fc_mp <= 28:
+        beta = 0.85
+    elif fc_mp < 55:
+        beta = 0.85 - 0.05/7 * (fc_mp - 28)
+    else:
+        beta = 0.65
+        
+    MUT = 0.9 * (51/160) * fc_mp * Bm * 1000 * beta * d**2 * (1 - 3*beta/16)
+    st.write(f"MUD = {MUD:.2f} kN-m")
+    st.write(f"MUT = {MUT:.2f} kN-m")
+    if MUT > MUD:
+        st.write(f"*Since MUT > MUD, tension-controlled (phi = 0.9)*")
+        phi = 0.9
+    else:
+        st.write(f"*Since MUT <= MUD, transition region (phi = assumed 0.75)*")
+        phi = 0.75
+    
+    Rn = round(MUD * 1e6 / (phi * Bm * d**2 * 1e9), 3)
+    tmp = 1 - 2*Rn/(0.85*fc_mp)
+    rho_actual = 0.0
+    if tmp >= 0:
+        rho_actual = round(0.85 * fc_mp / fy_mp * (1 - math.sqrt(tmp)), 4)
+    else:
+        rho_actual = 0.0
+    rho_min = round(max(1.4/fy_mp, 0.25 * math.sqrt(fc_mp) / fy_mp), 4)
+    rho_des = max(rho_actual, rho_min)
+    
+    st.write(f"Rn = {Rn:.3f}")
+    st.write(f"rho_actual = {rho_actual:.4f}")
+    st.write(f"rho_min = {rho_min:.4f}")
+    st.write(f"rho_des (governs) = {rho_des:.4f}")
+    
+    As = rho_des * Bm * d * 1e6  # mm2
+    n = math.ceil(As * 4 / (math.pi * d_b_mm**2))
+    st.write(f"As = {As:.2f} mm²")
+    st.warning(f"Provide {n}–{d_b_mm} mm diameter DRB on the top of the footing.")
+    
+    st.write("")
+    if strap:
+        strapcom()
+        st.stop()
+    else:
+        st.stop()
+    
+    
 
 
 
+if L >= L_min and L < L_max:
+    st.write(f"CHECK: L is greater than the minimum length.")
+    s= round(L-L_min,2)
+    if s != 0:
+        st.write(f"Extend the footing s= {s} meters {CASE}")
+    else:
+        st.write("s= 0, columns can be on the edge of the footing.")
+else:
+    st.error(f"Computed L is less than the minimum length or greater than the maximum length. Compute as **TRAPEZOIDAL COMBINED FOOTING**.")
+    trap ()
+    
 
+st.write("")
+st.write(f"***Solving for the footing's width***")
+# effective bearing capacity
+q_e = q_a - gamma_s * (d_f - t) - gamma_c * t
+B = R/ (q_e*L)
+st.write(f"Effective bearing capacity q_e = {q_e:.2f} kPa")
+st.write(f"**Footing's Width, B = {B:.3f} m., say {round(math.ceil(B / 0.05) * 0.05,2)}**")
+B= round(math.ceil(B / 0.05) * 0.05,2)
+st.write("")
 
+st.subheader("Footing thickness adequacy — One-Way Shear (Beam Shear)")
 
+P_U1  = 1.2 * P_D1  + 1.6 * P_L1
+P_U2  = 1.2 * P_D2  + 1.6 * P_L2
+R_U = P_U1 + P_U2
+w= round(R_U/L,2)
+d = round((t * 1000.0 - cc_mm - d_b_mm / 2.0) / 1000.0,2)
+if d <= 0:
+    st.error(f"Effective depth d = {d:.4f} m is non-positive. Check t, cc_mm, d_b_mm.")
+    st.stop()
+else:
+    st.write(f"d = {d:.2f} m")
 
+st.write(f"P_U1 = {P_U1:.2f} kN, P_U2 = {P_U2:.2f} kN, and R_U = {R_U:.2f} kN")
+st.write(f"Unifommly distributed load, w = {w} kN/m")
+st.write("")
 
+xvd1 = round(x1 + cx1/2 + d,2)
+xvd2 = round(x1 + D - cx2/2 - d,2)
+VUD1= abs(w* xvd1 - P_U1)
+Vd1 = VUD1*1000/(0.75*B*1000*d*1000)
+VUD2 = abs(w* xvd2 - P_U1)
+Vd2 = VUD2*1000/(0.75*B*1000*d*1000)
 
+Vda= fc_mp**0.5/6
+st.write(f"**Allowable Shear Stress: {Vda:.2f} MPa.**")
 
+st.write("*Critical point to the right of column 1:*")
+st.write(f"xvd1 = {xvd1:.3f} m.")
+st.write(f"VUD1 = {VUD1:.2f} kN.")
+st.write(f"Vd1 = {Vd1:.2f} MPa.")
+if Vda > Vd1:
+    st.success("One-way shear: SAFE.")
+else:
+    st.error("One-way shear: NOT SAFE.")
+st.write("")
+st.write("*Critical point to the left of column 2:*")
+st.write(f"xvd2 = {xvd2:.3f} m.")
+st.write(f"VUD2 = {VUD2:.2f} kN.")
+st.write(f"Vd2 = {Vd2:.2f} MPa.")
+if Vda > Vd2:
+    st.success("One-way shear: SAFE.")
+else:
+    st.error("One-way shear: NOT SAFE.")
 
+st.write("")
+st.subheader("Footing thickness adequacy — Two-Way Shear (Punching Shear)")
+q= round(R_U/L/B,2)
+st.write(f"Unifommly distributed pressure, qu = {q} kN/m")
+st.write("")
+Vpa = math.sqrt(fc_mp) / 3.0
+st.write(f"**Allowable Punching Stress: {Vpa:.2f} MPa.**")
+st.write("")
+
+st.write("*For column 1*")
+Cxd1 = round(cx1 + d,3)
+Cyd1 = round(cy1 + d,3)
+if LR== 2:
+    if Cxd1/2 <= cx1/2 + s:
+        Cxd1 = Cxd1
+        Bo1 = round(2*(Cxd1 + Cyd1),3)
+    else:
+        Cxd1 = round(cx1/2 + s + Cxd1/2,3)
+        Bo1 = round(2 * Cxd1 + Cyd1,3)
+    st.write(f"Cxd1 = {Cxd1:.3f} m.")
+    st.write(f"Cyd1 = {Cyd1:.3f} m.")
+    st.write(f"Bo1 = {Bo1:.3f} m.")
+if LR== 1:
+    Cxd1 = round(Cxd1 - d/2,3)
+    Bo1 = round(2 * Cxd1 + Cyd1,3)
+    st.write(f"Cxd1 = {Cxd1:.3f} m.")
+    st.write(f"Cyd1 = {Cyd1:.3f} m.")
+    st.write(f"Bo1 = {Bo1:.3f} m.")
+
+Vup1 = P_U1 - q * Cxd1 * Cyd1
+Vp1 = Vup1 * 1000 / (0.75 * Bo1 * d * 1_000_000)
+st.write(f"Vup1 = {Vup1:.2f} kN.")
+st.write(f"Vp1 = {Vp1:.2f} MPa.")
+
+if Vpa > Vp1:
+    st.success("Two-way/punching shear: SAFE.")
+else:
+    st.error("Two-way/punching shear: NOT SAFE.")
+    twopass = False
+    
+st.write("")
+st.write("*For column 2*")
+Cxd2 = round(cx2 + d,3)
+Cyd2 = round(cy2 + d,3)
+if LR== 1:
+    if Cxd2/2 <= cx2/2 + s:
+        Cxd2 = Cxd2
+        Bo2 = round(2*(Cxd2 + Cyd2),3)
+    else:
+        Cxd2 = round(cx2/2 + s + Cxd2/2,3)
+        Bo2 = round(2 * Cxd2 + Cyd2,3)
+    st.write(f"Cxd2 = {Cxd2:.3f} m.")
+    st.write(f"Cyd2 = {Cyd2:.3f} m.")
+    st.write(f"Bo2 = {Bo2:.3f} m.")
+if LR== 2:
+    Cxd2 = Cxd2 - d/2
+    Bo2 = round(2 * Cxd2 + Cyd2,3)
+    st.write(f"Cxd2 = {Cxd2:.3f} m.")
+    st.write(f"Cyd2 = {Cyd2:.3f} m.")
+    st.write(f"Bo2 = {Bo2:.3f} m.")
+
+Vup2 = P_U2 - q * Cxd2 * Cyd2
+Vp2 = Vup2 * 1000 / (0.75 * Bo2 * d * 1_000_000)
+st.write(f"Vup2 = {Vup2:.2f} kN.")
+st.write(f"Vp2 = {Vp2:.2f} MPa.")
+
+if Vpa > Vp2:
+    st.success("Two-way/punching shear: SAFE.")
+else:
+    st.error("Two-way/punching shear: NOT SAFE.")
+    twopass = False
+
+st.write("")
+st.subheader("Reinforcement (Flexural) Design")
+st.write(f"*ALONG THE LONG DIRECTION:*")
+xm= round(P_U1/w,2)
+
+if LR == 2:
+    MUD= abs(0.5*w*xm**2- P_U1*(xm-s-cx1/2))
+    a = 0.5*w
+    b= -P_U1
+    c = P_U1 +s+cx1/2
+    xi1= min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
+    xi2= max(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
+if LR == 1:
+    MUD= abs(0.5*w*xm**2- P_U1*(xm-cx1/2))
+    a = 0.5*w
+    b= -P_U1
+    c = P_U1*cx1/2
+    xi1= min(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
+    xi2= max(root for root in (( -b + math.sqrt(b**2 - 4*a*c) )/(2*a), ( -b - math.sqrt(b**2 - 4*a*c) )/(2*a)) if root >=0)
+
+if fc_mp <= 28:
+    beta = 0.85
+elif fc_mp < 55:
+    beta = 0.85 - 0.05/7 * (fc_mp - 28)
+else:
+    beta = 0.65
+    
+st.write("*Locating the inflection point of the bending moment, M=0*")
+st.write(f"The inflection point(s) of the moment is located **xi1= {xi1:.2f}** meters and **xi2= {xi2:.2f}** meters from the edge of the left footing.")
+
+MUT = 0.9 * (51/160) * fc_mp * B * 1000 * beta * d**2 * (1 - 3*beta/16)
+st.write("*Locating maximum moment at zero shear:*")
+st.write(f"The maximum moment is located **xm= {xm:.2f}** meters from the edge of the left footing.")
+st.write(f"MUD = {MUD:.2f} kN-m")
+st.write(f"MUT = {MUT:.2f} kN-m")
+if MUT > MUD:
+    st.write(f"*Since MUT > MUD, tension-controlled (phi = 0.9)*")
+    phi = 0.9
+else:
+    st.write(f"*Since MUT <= MUD, transition region (phi = assumed 0.75)*")
+    phi = 0.75
+
+Rn = round(MUD * 1e6 / (phi * B * d**2 * 1e9), 3)
+tmp = 1 - 2*Rn/(0.85*fc_mp)
+rho_actual = 0.0
+if tmp >= 0:
+    rho_actual = round(0.85 * fc_mp / fy_mp * (1 - math.sqrt(tmp)), 4)
+else:
+    rho_actual = 0.0
+rho_min = round(max(1.4/fy_mp, 0.25 * math.sqrt(fc_mp) / fy_mp), 4)
+rho_des = max(rho_actual, rho_min)
+
+st.write(f"Rn = {Rn:.3f}")
+st.write(f"rho_actual = {rho_actual:.4f}")
+st.write(f"rho_min = {rho_min:.4f}")
+st.write(f"rho_des (governs) = {rho_des:.4f}")
+
+As = rho_des * B * d * 1e6  # mm2
+n = math.ceil(As * 4 / (math.pi * d_b_mm**2))
+st.write(f"As = {As:.2f} mm²")
+st.warning(f"Provide {n}–{d_b_mm} mm diameter DRB on the top along the long direction, starting from {xi1:.2f} meters to {xi2:.2f} meters from the left edge of the footing.")
+
+st.write("")
+st.write(f"rho_min = {rho_min:.4f}")
+As = rho_min * B * d * 1e6  # mm2
+n = math.ceil(As * 4 / (math.pi * d_b_mm**2))
+st.write(f"As = {As:.2f} mm²")
+st.warning(f"Provide {n}–{d_b_mm} mm diameter on the bottom along the long direction, from the left edge of the footing to {xi1:.2f} meters and from {xi2:.2f} meters to the right edge of the footing.")
+
+#Along the short direction
+st.write(f"*ALONG THE SHORT DIRECTION:*")
+w= round(R_U/B,2)
+x = (B - cy1) / 2
+MUD = 0.5 * w * x**2
+st.write(f"x = {x:.2f} m.")
+st.write(f"w = {w:.2f} kN/m²")
+st.write(f"MUD = {MUD:.2f} kN-m")
+MUTx = 0.9 * (51/160) * fc_mp * L * 1000 * beta * d**2 * (1 - 3*beta/16)
+
+st.write(f"MUT = {MUTx:.2f} kN-m")
+
+if MUTx > MUD:
+    st.write(f"*Since MUT > MUD, tension-controlled (phi = 0.9)*")
+    phi = 0.9
+else:
+    st.write(f"*Since MUT <= MUD, transition region (phi = assumed 0.75)*")
+    phi = 0.75
+Rn = round(MUD * 1e6 / (phi * L * d**2 * 1e9), 3)
+tmp = 1 - 2*Rn/(0.85*fc_mp)
+rho_actual = 0.0
+if tmp >= 0:
+    rho_actual = round(0.85 * fc_mp / fy_mp * (1 - math.sqrt(tmp)), 4)
+rho_min = round(max(1.4/fy_mp, 0.25 * math.sqrt(fc_mp) / fy_mp), 4)
+rho_des = max(rho_actual, rho_min)
+As = rho_des * L * d * 1e6
+nx = As * 4 / (math.pi * d_b_mm**2)
+    
+st.write(f"Rn = {Rn:.3f}")
+st.write(f"rho_actual = {rho_actual:.4f}")
+st.write(f"rho_min = {rho_min:.4f}")
+st.write(f"rho_des (governs) = {rho_des:.4f}")
+st.write(f"As = {As:.2f} mm²")
+st.write(f"n = {nx:.2f} along the short-direction")
+nxb = math.ceil(2*nx/(L/B+1))
+nxs = math.ceil((nx-nxb)/2)*2
+nx = nxb+nxs
+st.warning(f"Along short direction: Provide **{nx}–{d_b_mm} mm diameter DRB**")
+
+if strap:
+    strapcom()
+else:
+    st.stop()
